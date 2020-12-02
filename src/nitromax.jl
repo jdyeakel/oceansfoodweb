@@ -1,10 +1,10 @@
 function nitromax(numSp,C,steps)
 
-    S = 0;
-    while S <= numSp/2
+    # S = 0;
+    # while S <= numSp/2
         A,n = nichemodelweb(numSp,C);
         S = size(A)[1];
-    end
+    # end
         # println(S)
 
 

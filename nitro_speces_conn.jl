@@ -8,9 +8,13 @@ using ProgressMeter
 @everywhere using Distributions
 @everywhere using RCall
 @everywhere using SharedArrays
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
+
+@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/nichemodelweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/quantitativeweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/nitromax.jl");
 
 #measure error
 @everywhere function calcerror(Q,est_tl)
@@ -23,9 +27,9 @@ using ProgressMeter
     return pred_tl, err
 end
 
-steps = 10000;
+steps = 50000;
 
-spvec = collect(20:1:30);
+spvec = collect(15:1:30);
 cvec = collect(0.05:0.01:0.1);
 reps = 25;
 
