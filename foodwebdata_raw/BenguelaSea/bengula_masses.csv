@@ -1,0 +1,30 @@
+,node,mass_kg
+1,Phytoplankton,1E-07
+2,Benthic Filter-feeders,0.01
+3,Bacteria,1E-11
+4,Benthic Carnivores,0.01
+5,Microzoo,1E-07
+6,esozoo,1E-05
+7,Macrozoo,0.001
+8,Gelatinous zoo,0.1
+9,Anchovy,0.0115
+10,Pilchard,0.28
+11,Round Herring,0.2152
+12,Lightfish,0.0048
+13,Lanternfish,0.0069
+14,goby,0.0186
+15,Other Pleagics,2.55485
+16,Horse mackerel,5.1049
+17,Chub mackerel,3.2595
+18,Other Groundfish,13.127
+19,Hake,22.99
+20,squid,0.04
+21,tunas,909
+22,snoek,13.0121
+23,kob,68
+24,yellowtail,82.04
+25,feelbeck,26.12
+26,cetaceans,82
+27,birds,2.287
+28,seals,136
+29,sharks,1500

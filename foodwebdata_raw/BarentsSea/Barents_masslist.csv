@@ -1,0 +1,160 @@
+species,mass_g,length_cm,role,notes,link
+Detritus,,0.0001,2,,
+Autothroph_flagellat,,1,1,,"https://academic.oup.com/plankt/article/28/4/345/1569658#:~:text=Heterotrophic%20flagellates%20%3C5%20%C2%B5m%20were,9%20and%2012%20%C2%B5m%2C%20respectively."
+Bacteria_indet,,0.0005,2,,https://en.wikipedia.org/wiki/Bacteria
+Diatom,,0.01,2,Diatoms; 100 micrometers,https://en.wikipedia.org/wiki/Diatom#:~:text=Diatoms%20are%202%20to%20200%20micrometers%20in%20length.
+Heterotroph_flagellat,,0.00035,2,,"https://academic.oup.com/plankt/article/28/4/345/1569658#:~:text=Heterotrophic%20flagellates%20%3C5%20%C2%B5m%20were,9%20and%2012%20%C2%B5m%2C%20respectively."
+Ice_algae,,1,1,,
+Macroalgae,,1,1,,
+Mixotroph_flagellates,,0.00035,2,,"https://academic.oup.com/plankt/article/28/4/345/1569658#:~:text=Heterotrophic%20flagellates%20%3C5%20%C2%B5m%20were,9%20and%2012%20%C2%B5m%2C%20respectively."
+Phytoplankton_indet,,1,1,,
+Protozooplankton,,0.5,2,,"http://lakes.chebucto.org/plankton.html#:~:text=Most%20are%20between%20200%2D400,mm)%20or%20about%200.2%20inches."
+Aglantha_digitale,,4,2,hydrozoan,https://en.wikipedia.org/wiki/Aglantha_digitale
+Apherusa_glacialis,,1.4,2,amphipod,http://www.arcodiv.org/seaice/amphipods/Apherusa_glacialis.html
+Bolinopsis_infundibulum,,15,2,comb jelly,https://en.wikipedia.org/wiki/Bolinopsis_infundibulum
+Calanus_finmarchicus,,0.3,2,copepod,https://en.wikipedia.org/wiki/Calanus_finmarchicus
+Calanus_glacialis,,0.4,2,copepod,https://en.wikipedia.org/wiki/Calanus_glacialis
+Calanus_hyperboreus,,0.56,2,copepod,https://en.wikipedia.org/wiki/Calanus_hyperboreus
+Clione_limacina,,8,2,sea slug,https://en.wikipedia.org/wiki/Clione_limacina
+Cyanea_capillata,,50,2,jelly; bell diameter; low lat,https://en.wikipedia.org/wiki/Lion%27s_mane_jellyfish
+Dimophyes_arctica,,1.5,2,nectophore height,http://species-identification.org/species.php?species_group=zmns&id=134
+Eukrohnia_hamata,,4.3,2,,"https://inverts.wallawalla.edu/Chaetognatha/Eukrohnia_hamata.html#:~:text=Length%20up%20to%204.3%20cm,Geographical%20Range%3A%20Cosmopolitan."
+Euphysa_flammea,,1.5,2,medusa height,https://www.researchgate.net/publication/229439705_The_European_athecate_hydroids_and_their_medusae_Hydrozoa_Cnidaria_Capitata_Part_2/download
+Fritillaria_borealis,,0.13,2,trunk length,http://species-identification.org/species.php?species_group=zmns&id=573
+Gammarus_wilkitzkii,,6,2,amphipod,http://www.arcodiv.org/seaice/amphipods/Gammarus_wilkitzkii.html
+Limacina_helicina,,0.5,2,mollusk,https://en.wikipedia.org/wiki/Limacina_helicina
+Mertensia_ovum,,10,2,comb jelly,https://en.wikipedia.org/wiki/Mertensia_ovum
+Metridia_longa,,0.43,2,copepod,https://en.wikipedia.org/wiki/Metridia_longa
+Metridia_lucens,,0.2,2,copepod,https://eol.org/pages/336408
+Microcalanus_spp,,0.083,2,copepod,https://copepodes.obs-banyuls.fr/en/fichesp.php?sp=621
+Oikopleura_spp,,0.01,2,tunicate,https://en.wikipedia.org/wiki/Oikopleura_dioica
+Oikopleura_vanhoeffeni,,0.07,2,trunk length,http://species-identification.org/species.php?species_group=zmns&id=571
+Oithona_similis,,0.085,2,Copepod,https://scripps.ucsd.edu/zooplanktonguide/species/oithona-similis
+Onisimus_glacialis,,0.06,2,amphipod,https://www.researchgate.net/publication/226348355_Life_history_and_population_dynamics_of_the_Arctic_sympagic_amphipods_Onisimus_nanseni_Sars_and_O_glacialis_Sars_Gammaridea_Lysianassidae/link/553f88dc0cf2574dcf62a89f/download
+Onisimus_nanseni,,0.25,2,amphipod,http://www.arcodiv.org/seaice/amphipods/Onisimus_nanseni.html
+Pareuchaeta_glacialis,,0.8545,2,amphipod,https://copepodes.obs-banyuls.fr/en/fichesp.php?sp=764
+Pareuchaeta_spp,,0.8545,2,amphipod; from glacialis,https://copepodes.obs-banyuls.fr/en/fichesp.php?sp=764
+Pseudocalanus_spp,,0.18,2,from P. elongatus,"https://en.wikipedia.org/wiki/Pseudocalanus_elongatus#:~:text=cycle%20and%20reproduction-,Description,male%20is%20usually%20between%20about%20."
+Sagitta_spp,,1.5,2,from S. bedoti,http://species-identification.org/species.php?species_group=chaetognatha&id=61
+Sarsia_spp,,1.8,2,Umbrella length,http://species-identification.org/species.php?species_group=zmns&id=171
+Themisto_abyssorum,,1.8,2,,"https://en.wikipedia.org/wiki/Themisto_(amphipod)#:~:text=Themisto%20abyssorum%20has%20a%20life,31%20mm%20(1.2%20in)."
+Themisto_libellula,,3.1,2,,"https://en.wikipedia.org/wiki/Themisto_(amphipod)#:~:text=Themisto%20abyssorum%20has%20a%20life,31%20mm%20(1.2%20in)."
+Thysanoessa_inermis,,2.85,2,amphipod,"http://species-identification.org/species.php?species_group=euphausiids&id=78#:~:text=inermis%20)%20(See%20HORIZONTAL%20DISTRIBUTION),end%20almost%20to%20the%20base."
+Thysanoessa_longicaudata,,1.6,2,amphipod,http://species-identification.org/species.php?species_group=euphausiids&id=80&menuentry=soorten
+Actiniaria_g_sp,,3,2,sea anemone,https://en.wikipedia.org/wiki/Sea_anemone
+Aglaophamus_malmgreni,,10,2,polychaete,https://www.sealifebase.ca/summary/Aglaophamus-malmgreni.html
+Aphelochaeta_marioni,,3,2,bristleworm,https://www.marlin.ac.uk/species/detail/1556
+Arrhis_phyllonyx,,2,2,,http://species-identification.org/species.php?species_group=crustacea&id=421
+Ascidiacea_g_sp,,8,2,Sea squirt,"https://www.encyclopedia.com/environment/encyclopedias-almanacs-transcripts-and-maps/ascidiacea-sea-squirts#:~:text=None%20known.-,physical%20characteristics,(8%20cm)%20in%20diameter."
+Astarte_sp,,3,2,Bivalve,https://naturalhistory.museumwales.ac.uk/britishbivalves/browserecord.php?-recid=18
+Balanus_sp,,5,2,Barnacles,https://en.wikipedia.org/wiki/Balanus
+Bathyarca_glacialis,,1.9,2,bivalve,https://www.sealifebase.se/summary/Bathyarca-glacialis.html
+Bryozoa_indet,,0.05,2,bryozoa,"https://en.wikipedia.org/wiki/Bryozoa#:~:text=See%20text.&text=Bryozoa%20(also%20known%20as%20the,of%20tentacles%20lined%20with%20cilia."
+Benthos_larvae,,0.7,2,based on Palaemonetes,https://www.jstor.org/stable/pdf/2460071.pdf
+Buccinum_sp,,3.5,2,whelk,"https://inverts.wallawalla.edu/Mollusca/Gastropoda/Prosobranchia/Order_Neogastropoda/Suborder_Rachiglossa/Family_Buccinidae/Buccinum_thermophilum.html#:~:text=Buccinum%20thermophilum%2C%20preserved%2C%20collected%20from,(height)%20about%203.5%20cm.&text=Description%3A%20Whelks%20of%20family%20Buccinidae,often%20have%20a%20distinct%20shoulder."
+Chaetozone_sp,,2.25,2,polychaete,"https://www.marlin.ac.uk/species/detail/2099#:~:text=Chaetozone%20setosa%20has%20a%20relatively,%2D90%20segments%20(chaetigers)."
+Chionoecetes_opilio,,16.5,2,crab,"https://en.wikipedia.org/wiki/Chionoecetes_opilio#:~:text=Males%20can%20grow%20up%20to,in)%20in%20width%20and%20length."
+Chlamys_islandica,,14,2,scallop,"https://en.wikipedia.org/wiki/Chlamys_islandica#:~:text=It%20is%20highly%20variable%20in,14%20cm%20(5.5%20in)."
+Chone_sp,,1.5,2,based on Chone longocirrata,http://species-identification.org/species.php?species_group=macrobenthos_polychaeta&id=492
+Ciona_intestinalis,,15,2,Sea squirt,"https://www.marlin.ac.uk/species/detail/1369#:~:text=Ciona%20intestinalis%20is%20a%20large,orange%20bars%20on%20the%20body."
+Colus_sp,,8,2,Whelk,https://www.sealifebase.org/summary/Colus-pubescens.html
+Crossaster_papposus,,34,2,sunstar; diameter,"https://www.marlin.ac.uk/species/detail/1192#:~:text=A%20very%20distinctive%20sun%20star,with%20small%20but%20distinct%20spines."
+Ctenodiscus_crispatus,,10.8,2,Rough diameter,http://linnet.geog.ubc.ca/efauna/Atlas/Atlas.aspx?sciname=Ctenodiscus%20crispatus
+Electra_arctica,,1,1,Moss?,https://sv.wikipedia.org/wiki/Electra_arctica
+Foraminifera,,0.01,2,,http://research.bpcrc.osu.edu/foram/whatarefor.htm
+Galathowenia_sp,,1.2,2,,https://www.researchgate.net/publication/259424447_Galathowenia_kirkegaardi_SP_nov_Polychaeta_Oweniidae_from_the_Gulf_of_Mexico/link/54f5f7600cf2ca5efefd853c/download
+Gammaridae_indet,,2,2,for G. locusta (Barents sea),https://www.researchgate.net/publication/235961181_Life_history_reproductive_biology_and_production_of_Gammarus_chevreuxi_Amphipoda_Gammaridae_in_Ria_de_Aveiro_NW_Portugal
+Gonatus_fabricii,,30,2,Mantle length,https://en.wikipedia.org/wiki/Gonatus_fabricii
+Gorgonocephalus_sp,,14,2,Diameter; for G. eucnemis,https://en.wikipedia.org/wiki/Gorgonocephalus_eucnemis
+Heliometra_glacialis,,20,2,Arm length,"http://species-identification.org/species.php?species_group=echinodermata&id=56#:~:text=Heliometra%20glacialis%20is%20a%20large,200%20mm%20or%20even%20more."
+Heteromastus_filiformis,,10,2,,"http://www.marinespecies.org/aphia.php?p=taxdetails&id=129884#:~:text=Description%20This%20bristle%20worm%20has,long%20body%20(100%20mm)."
+Hyas_sp,,5,2,Carapace length,"http://species-identification.org/species.php?species_group=crustacea&id=207#:~:text=Size%3A,region%20to%20beyond%2080%20metres."
+Hydrozoa_indet,,1,1,too general?,
+Maldane_sarsi,,1.1,2,,"http://species-identification.org/species.php?species_group=macrobenthos_polychaeta&id=662#:~:text=sarsi%2Dchaetae).,110%20mm%20for%2019%20chaetigers."
+Mendicula_ferruginosa,,0.45,2,bivalve,https://naturalhistory.museumwales.ac.uk/britishbivalves/browserecord.php?-recid=369
+Molpadia_borealis,,5,2,,http://megabenthos.info/catalog/echinodermata/holothuroidea/molpadida/molpadiidae/molpadia/molpadia-borealis/
+Myriochele_herri,,2.3,2,,https://core.ac.uk/download/pdf/75988441.pdf
+Nephtheidae_sp,,1,1,coral,
+Ophiacantha bidentata,,0.1,2,disc diameter,https://www.researchgate.net/figure/Ophiacantha-bidentata-Size-frequency-1-mm-disc-diameter-classes-of-specimens-measured_fig2_216702026
+Ophiocten sericeum,,1.8,2,disc diameter,http://www.arcodiv.org/seabottom/echinoidea/O_sericeum.html
+Ophiopholis aculeata,,2,2,disc diameter,https://en.wikipedia.org/wiki/Ophiopholis_aculeata
+Ophiopleura borealis,,0.5,2,disc diameter,https://www.nrm.se/download/18.4e32c81078a8d9249800016705/j.1096-3642.2005.00155.x.pdf
+Ophioscolex glacialis,,0.844,2,disc diameter,https://www.researchgate.net/publication/312310411_Echinodermata_Ophiomyxidae_Ophioscolex_glacialis_Muller_and_Troschel_1842_first_record_of_the_species_for_the_South_Atlantic
+Ophiura_sp,,3.5,2,disc diameter; from O. ophiura,https://en.wikipedia.org/wiki/Ophiura_ophiura
+Ostracoda_indet,,1,2,Mid-range (0.01 to 3.2 cm),"https://ucmp.berkeley.edu/arthropoda/crustacea/maxillopoda/ostracoda.html#:~:text=The%20Ostracoda%20are%20one%20of,the%20size%20of%20a%20meatball)."
+Pagurus_sp,,2.5,2,hermit crabs,"https://naturalhistory2.si.edu/smsfp/irlspec/Pagurus_longicarpus.htm#:~:text=Pagurus%20longicarpus%20is%20a%20small,(Rupert%20and%20Fox%201988)."
+Pandalus_borealis,,14,2,shrimps,https://en.wikipedia.org/wiki/Pandalus_borealis
+Paramphinome_jeffreysii,,1.5,2,,http://species-identification.org/species.php?species_group=macrobenthos_polychaeta&id=774
+Phascolion_strombus,,5,2,,"http://species-identification.org/species.php?species_group=macrobenthos_sipuncula&id=29#:~:text=Description%3A,depending%20on%20the%20shelter%20inhabited."
+Polychaeta,,0.4,2,based on Scolelepis,https://www.researchgate.net/publication/282650485_New_species_of_Scolelepis_Polychaeta_Spionidae_from_the_Norwegian_coast_and_Barents_Sea_with_a_brief_review_of_the_genus
+Polynoidae_indet,,0.5,2,Pg 263,https://www.jstor.org/stable/pdf/23731622.pdf?casa_token=eGupdBKRIxcAAAAA:-lxVKMAr-VkpsxwI-6z3S3HfpnA_i4JzI8FnGrY_Ss71C1qfrYn-S0WBYe-60AX3NOBdl4bZgnk7dAg8dSGsoSYwwKr59rnLDzrdzhPI3J41nKR_dg
+Pontaster_tenuispinus,,4,2,disc diameter rough estimate (15 cm full diameter),https://www.artsdatabanken.no/Pages/231368/
+Porifera_g_sp,,1,1,sponges,
+Prionospio_cirrifera,,3,2,,http://species-identification.org/species.php?species_group=macrobenthos_polychaeta&id=855
+Pycnogonida_g_sp,,0.5,2,Sea spiders; rough est.,"https://link.springer.com/referenceworkentry/10.1007%2F978-1-4020-6359-6_4098#:~:text=Most%20pycnogonids%20have%20a%20body,span%20of%2030%E2%80%9340%20cm."
+Rhachotropis_macropus,,1,2,,https://www.tandfonline.com/doi/full/10.1080/00222930600956809?scroll=top&needAccess=true&
+Rossia_sp,,9,2,Bobtail squid; Mantle length,"https://en.wikipedia.org/wiki/Rossia#:~:text=Rossia%20is%20a%20genus%20of,in%20mantle%20length."
+Sabinea_sp,,1,2,amphipod,http://www.marinespecies.org/photogallery.php?album=717&pic=30535#photogallery
+Scalibregma_inflatum,,6,2,Polychaete,"https://en.wikipedia.org/wiki/Scalibregma_inflatum#:~:text=3%20Systematics-,Morphology,a%20long%20slim%20posterior%20part."
+Sclerocrangon_ferox,,11,2,based on S. igarashii,https://decapoda.nhm.org/pdfs/18340/18340.pdf
+Similipecten_greenlandicus,,2,2,1-3 cm,https://naturalhistory.museumwales.ac.uk/BritishBivalves/Browserecord.php?-recid=227
+Spiochaetopterus_typicus,,13,2,,"http://www.iopan.gda.pl/projects/DBO/list/Annelida/Spiochaetopterus_typicus/Spiochaetopterus_typicus.html#:~:text=Spiochaetopterus%20typicus%20(M.,Sars%2C%201856)&text=Up%20to%20130%20mm%20for%20over%20150%20segments."
+Spiophanes_kroeyeri,,3,2,,https://www.sealifebase.se/summary/Spiophanes-kroyeri.html
+Spirorbidae_indet,,0.5,2,whirl diameter; 0.2 to 0.7,https://www.researchgate.net/publication/260567636_On_the_morphoecology_of_spirorbid_tubes_Polychaeta_Spirorbidae
+Strongylocentrotus_sp,,5,2,Sea urchins; based on S. droebachiensis,"https://en.wikipedia.org/wiki/Strongylocentrotus_droebachiensis#:~:text=The%20average%20adult%20size%20is,but%20will%20eat%20other%20organisms."
+Terebellides_stroemi,,3,2,More worms,"https://inverts.wallawalla.edu/Annelida/Trichobranchidae/Terebellides_stroemi.html#:~:text=Total%20length%203%20cm.&text=Description%3A%20Polychaetes%20from%20family%20Trichobranchidae,be%20retracted%20into%20the%20mouth."
+Thyasira_gouldi,,1,2,bivalve,https://naturalhistory.museumwales.ac.uk/britishbivalves/browserecord.php?-recid=359
+Urasterias_linckii,,1.5,2,disc diameter,https://collections.nmnh.si.edu/search/iz/?ark=ark:/65665/3d7e527cb77f9408a994b21d123c53b3d
+Amblyraja_hyperborea,,103,2,skate,"https://www.fishbase.se/summary/9256#:~:text=Egg%20capsule%20measures%2081%2D125,15%20cm%20long%20in%20Ref."
+Anarhichas_lupus,,152,2,Wolffish,"http://www.arctic.uoguelph.ca/cpl/organisms/fish/marine/wolffish/atlantic.htm#:~:text=Its%20dorsal%20fin%20extends%20the,no%20more%20than%20152%20cm."
+Anisarchus_medius,,18,2,Eelblenny,"http://www.polarlife.ca/Organisms/fish/marine/pricklebacks/stout.htm#:~:text=Stout%20Eelblenny%2C%20Anisarchus%20medius&text=It%20rarely%20exceeds%20a%20length,head%20to%20the%20caudal%20fin."
+Arctogadus_glacialis,,30,2,Arctic cod,https://en.wikipedia.org/wiki/Arctogadus
+Artediellus_atlanticus,,10.5,2,sculpin,https://www.fishbase.se/summary/Artediellus-atlanticus
+Boreogadus_saida,,40,2,polar cod,"https://en.wikipedia.org/wiki/Boreogadus_saida#:~:text=is%20Arctogadus%20glacialis.-,B.,40%20cm%20(16%20in)."
+Careproctus_sp,,14.1375,2,Snailfish – Barents measures,https://www.researchgate.net/publication/305316787_Chernova_NV_2005_New_Species_of_Careproctus_Liparidae_from_the_Barents_Sea_and_Adjacent_Waters_Journal_of_Ichthyology_V_45_No_9_R_689-699
+Cottunculus_microps,,11.5,2,Polar sculpin,"https://en.wikipedia.org/wiki/Cottunculus_microps#:~:text=3%20Ecology-,Description,(3.5%20and%205.5%20in)."
+Eumicrotremus_spinosus,,13.2,2,,http://species-identification.org/species.php?species_group=fnam&id=2171
+Gaidropsarus_argentatus,,45,2,Rockling,"http://www.arctic.uoguelph.ca/cpl/organisms/fish/marine/gadidae/silverrock.htm#:~:text=Adults%20reach%20a%20size%20of,as%20shallow%20as%20150%20m."
+Gymnelus_spp,,14,2,based on G. andersoni (Barents),https://www.fishbase.se/summary/Gymnelus-andersoni.html
+Gymnocanthus_tricuspis,,19.5,2,sculpin,http://fishbase.mnhn.fr/Summary/SpeciesSummary.php?id=4092
+Hippoglossoides_platessoides,,58.8,2,plaice,https://www.fishbase.org/Summary/SpeciesSummary.php?ID=4239&AT=Gapeflyndre
+Icelus_spp,,12.9,2,based on I. Spatula (Barents),https://www.fishbase.in/summary/4108
+Leptagonus_decagonus,,21,2,poacher,"https://en.wikipedia.org/wiki/Leptagonus_decagonus#:~:text=Leptagonus%20decagonus%2C%20the%20Atlantic%20poacher,centimetres%20(8.3%20in)%20TL."
+Leptoclinus_maculatus,,13,2,shanny,https://www.fishbase.org/summary/Leptoclinus-maculatus.html
+Liparis_fabricii,,20,2,Snailfish,"https://en.wikipedia.org/wiki/Liparis_fabricii#:~:text=Liparis%20fabricii%20grows%20to%20a,tapering%20towards%20a%20narrow%20tail."
+Liparis_gibbus,,21.6,2,Snailfish,https://slgo.ca/app-guidespeces/species.jsp?id=115&lg=en
+Lumpenus_fabricii,,30,2,Eelblenny,http://www.arctic.uoguelph.ca/cpl/organisms/fish/marine/pricklebacks/slender.htm
+Lumpenus_lampretaeformis,,20.5,2,pricklebacks,"http://www.luontoportti.com/suomi/en/kalat/snake-blenny#:~:text=Size%3A%20Usually%2020%2D30%20cm,eel%20or%20an%20elongated%20burbot."
+Lycenchelys_kolthoffi,,16,2,Ray-finned fish,https://www.fishbase.in/summary/15471
+Lycodes_eudipleurostictus,,44.5,2,Ray-finned fish,https://www.fishbase.de/summary/25228
+Lycodes_pallidus,,20,2,Ray-finned fish,"http://www.arctic.uoguelph.ca/cpl/organisms/fish/marine/eelpouts/pale.htm#:~:text=Normally%20growing%20to%20a%20length,dorsal%20fin%20to%20the%20belly."
+Lycodes_reticulatus,,37,2,Ray-finned fish,http://species-identification.org/species.php?species_group=fnam&id=1693
+Lycodes_rossi,,23,2,Ray-finned fish,http://species-identification.org/species.php?species_group=fnam&id=1694
+Lycodes_seminudus,,35,2,Ray-finned fish,http://species-identification.org/species.php?species_group=fnam&id=1696
+Mallotus_villosus,,17,2,Capelin,https://www.fishbase.se/summary/Mallotus-villosus.html
+Myoxocephalus_scorpius,,25,2,sculpin,http://www.luontoportti.com/suomi/en/kalat/short-horn-sculpin
+Paraliparis_bathybius,,25.3,2,seasnail,http://www.gbif.sinica.edu.tw/Summary/SpeciesSummary.php?ID=15564&AT=Arktisk+dybhavsringbug
+Fish_larvae,,6,2,"Cod, haddock, saithe, herring, capelin in Barents",https://core.ac.uk/download/pdf/52051439.pdf
+Reinhardtius_hippoglossoides,,90,2,halibut,"http://www.fao.org/fishery/species/2544/en#:~:text=Maximum%20length%20about%20120%20cm,cm%20and%2011%2D25%20kg.&text=Mainly%20caught%20on%20long%20lines,%22%20and%20%22groundfish%20longlining%22."
+Triglops_murrayi,,11,2,sculpin,http://species-identification.org/species.php?species_group=fnam&id=2163
+Triglops_nybelini,,15,2,sculpin,http://www.arctic.uoguelph.ca/cpl/organisms/fish/marine/sculpins/bigeye.htm
+Triglops_pingelii,,9,2,sculpin,http://species-identification.org/species.php?species_group=fnam&id=2164
+Ulcina_olrikii,,8.6,2,alligatorfish,https://en.wikipedia.org/wiki/Arctic_alligatorfish#:~:text=Males%20can%20reach%20a%20maximum%20total%20length%20of%208.6%20centimetres.
+Alle_alle,,20,3,auk; length,https://en.wikipedia.org/wiki/Little_auk
+Fulmarus_glacialis,,46,3,fulmar,https://en.wikipedia.org/wiki/Northern_fulmar
+Larus_hyperboreus,,68.5,3,gull,"https://nhpbs.org/wild/glaucousgull.asp#:~:text=The%20glaucous%20gull%20is%20a,bill%20with%20a%20red%20tip."
+Rissa_tridactyla,,39.37,3,kittiwake,"https://nhpbs.org/natureworks/blackleggedkittiwake.htm#:~:text=The%20black%2Dlegged%20kittiwake%20is,and%20black%20tips%20on%20wings."
+Uria_lomvia,,44,3,guillemot,https://en.wikipedia.org/wiki/Thick-billed_murre
+Balaenoptera_acutorostrata,,1067,4,minke whale; baleen,https://www.fisheries.noaa.gov/species/minke-whale
+Balaenoptera_physalus,,2438,4,fin whale; baleen,https://www.fisheries.noaa.gov/species/fin-whale
+Cystophora_cristata,,240,2,hooded seal,http://www.fao.org/fishery/species/2733/en
+Delphinapterus_leucas,,502.9,2,beluga,https://www.nationalgeographic.com/animals/mammals/b/beluga-whale/
+Erignathus_barbatus,,229,2,bearded seal,https://en.wikipedia.org/wiki/Bearded_seal
+Lagenorhynchus_albirostris,,274,2,White-beaked dolphin,https://en.wikipedia.org/wiki/White-beaked_dolphin
+Megaptera_novaeangliae,,1450,4,Humpback,https://en.wikipedia.org/wiki/Humpback_whale
+Monodon_monoceros,,450,2,Narwhal; excluding tusk,https://en.wikipedia.org/wiki/Narwhal
+Odobenus_rosmarus,,300,2,walrus,https://en.wikipedia.org/wiki/Walrus
+Orcinus_orca,,850,2,killer whale,https://www.npolar.no/en/species/killer-whale/
+Pagophilus_groenlandicus,,175,2,harp seal,https://marinebio.org/species/harp-seals/pagophilus-groenlandicus/
+Phoca_hispida,,152,2,ringed seal,https://en.wikipedia.org/wiki/Ringed_seal
+Ursus_maritimus,,220,2,polar bear,https://en.wikipedia.org/wiki/Polar_bear

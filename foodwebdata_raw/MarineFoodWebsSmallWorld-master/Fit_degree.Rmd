@@ -1,0 +1,218 @@
+---
+title: "Marine Networks - Testing Small Network"
+author: "L.A.S. - T. M."
+output: html_document
+---
+## Referencias
+
+1. Clauset, A., Shalizi, C. & Newman, M. (2009). Power-Law Distributions in Empirical Data. SIAM Rev., 51, 661–703
+
+## Setup
+
+```{r setup, eval=T,echo=FALSE }
+load(".RData")
+#simul  <- F # variable to perform or not the simulations
+
+
+oldcd <-getwd()
+
+
+require(pander)
+require(plyr)
+require(dplyr)
+panderOptions('table.split.table',Inf)
+panderOptions('table.style', 'multiline')
+options("scipen"=6, "digits"=4)
+
+#Load package
+library(poweRlaw) 
+source("R/dist_fun.r")
+# 
+# Load functions for discrete distributions
+# # 
+# Load functions for continuous ht distributions
+# 
+
+source("R/powerlaw/discpowerexp.R")
+source("R/powerlaw/discexp.R")
+source("R/powerlaw/zeta.R")
+# 
+# Load functions for continuous ht distributions
+# 
+source("R/powerlaw/powerexp.R")
+source("R/powerlaw/exp.R")
+source("R/powerlaw/pareto.R")
+#
+
+```
+
+
+# Fit degree distribution for total food-web
+
+```{r degreeFitTot, eval=T,echo=F,message=T,warning=T}
+
+dtot <- read.delim("Data/AllNetworksDegree.dat", quote="",stringsAsFactors = F)
+unique(dtot$Network)
+
+opt.output <- vector("list", length=0)
+opt.output$GOF <- 0
+opt.output$ploting <- 1
+
+# Only new networks
+#
+dtot <- dtot %>% filter(Network=="Peru")
+
+fit <- dtot %>% group_by(Network) %>% do(fit_ht_dplyr_helper(.))
+fitML <- bind_rows(fitML,fit)
+
+# Correct negative uniform parameter
+#
+fitML1 <- fitML %>% filter(ModelNames=="Uniform") %>% mutate(par1=abs(par1))
+fitML <- fitML %>% filter(ModelNames!="Uniform") %>% bind_rows(fitML1)
+# freq_plot_con_ht(dt$Grado,dft)
+
+fitML1 <- filter(fitML, Delta_AICc==0) %>% mutate_if(is.numeric, round, digits=4) 
+
+write.csv(fitML, file="AllNetworksFit.csv")
+write.csv(fitML1, file="AllNetworksLowerAICc.csv")
+
+save.image()
+
+# fitML$xmin<-1
+# dt <- filter(dtot, Network=="Jamaica")
+# ft <- filter(fitML, Network=="Jamaica")
+# 
+# cdfplot_displ_exp(dt$Degree,ft)
+# freq_plot_con_ht(dt$Degree,ft)
+# dtot %>% group_by(Network) %>% do(fit_ht_dplyr_helper(.))
+
+
+```
+
+
+# Generate random networks to obtain confidence intervals and compare with experimental FW
+
+
+```{r ramdomSmallWorld, eval=T,echo=F,message=T,warning=T}
+require(igraph)
+require(dplyr)
+source("R/small_world_fun.r")
+
+# Read networks data
+#
+ntot <- read.delim("Data/AllNetworksSLC.dat", quote="",stringsAsFactors = F)
+unique(ntot$Network)
+# Calculate confidence intervals for random networks (erdos.renyi)
+#
+swtot <- ntot %>% group_by(Network) %>% do( calc_cpl_cc(.$Size,.$Links,.$CPL,.$CC)) %>% inner_join(ntot) 
+swtot <- swtot %>% arrange(desc(C))
+
+
+# Arrange using Connectivity in descending order 
+#
+xlbl <-swtot %>% arrange(C) 
+#
+# Add SW test empirical CPL inside random CPL
+#             empirical CC > random CC
+#
+swtot <- swtot %>% mutate(isInsideCPL = ( CPL<=cha.pathUp), isGreaterCC =( CC>clus.coefHigh),
+                          isSW= isInsideCPL & isGreaterCC, CPL_ratio=CPL/cha.pathMean, CC_ratio=CC/clus.coefMean,isSWness=SWness>SWnessCI)  
+
+# Plot CC CPL Ratios with colors 
+#
+require(ggplot2)
+require(viridis)
+require(cowplot)
+ggplot(swtot, aes(CPL_ratio,CC_ratio,shape=isSW,fill=isSW)) + geom_point() + theme_bw()+  scale_colour_viridis(discrete = T) + scale_fill_viridis(discrete = T) + geom_text(aes(label=Network),check_overlap = TRUE,size=3,vjust=0,nudge_y = 0.03) +  theme(legend.position="bottom") + scale_shape_manual(values=c(21,25))+ ylab(expression(CC[Empirical]/CC[Random])) +  xlab(expression(CPL[Empirical]/CPL[Random]))
+ggsave("figures/IsSmallWorld_CPL_CC.png",width=5,height=6,units="in",dpi=600)
+
+
+
+ggplot(swtot, aes(CPL_ratio,CC_ratio,shape=isSWness,fill=isSWness)) + geom_point() + theme_bw()+  scale_colour_viridis(discrete = T) + scale_fill_viridis(discrete = T) + geom_text(aes(label=Network),check_overlap = TRUE,size=3,vjust=0,nudge_y = 0.03) +  theme(legend.position="bottom") + scale_shape_manual(values=c(21,25))+ ylab(expression(CC[Empirical]/CC[Random])) +  xlab(expression(CPL[Empirical]/CPL[Random]))
+ggsave("figures/IsSmallWorld_ness_CPL_CC.png",width=5,height=6,units="in",dpi=600)
+
+##
+
+ggplot(swtot, aes(Network,CC,shape=isSW)) + geom_point() + geom_linerange(aes(ymin = clus.coefLow, ymax = clus.coefHigh)) +theme_bw()+coord_flip() + scale_shape_manual(values=c(21,25),guide=FALSE) + scale_colour_viridis(discrete = T,guide=FALSE)+ scale_x_discrete(limits=xlbl$Network) # + scale_y_log10()  
+
+# Plot in BW Clustering Coeficient
+#
+A <- ggplot(swtot, aes(Network,CC,shape=isSW)) + geom_point() + geom_errorbar(aes(ymin = clus.coefLow, ymax = clus.coefHigh),width=0.1) +theme_bw()+coord_flip()+ scale_shape_manual(values=c(21,25),guide=FALSE) + scale_x_discrete(limits=xlbl$Network)  + theme(axis.title.y = element_blank())
+
+#ggsave("figures/CC_rnd95confint.png",width=5,height=6,units="in",dpi=600)
+
+# Plot in BW Path Length
+#
+B <- ggplot(swtot, aes(Network,CPL,shape=isSW)) + geom_point() + geom_errorbar(aes(ymin = cha.pathLow, ymax = cha.pathUp),width=0.1) +theme_bw()+coord_flip()  + scale_x_discrete(limits=xlbl$Network) + scale_shape_manual(values=c(21,25),guide=FALSE) + theme(axis.text.y = element_blank()) + xlab("")
+#ggsave("figures/CPL_rnd95confint.png",width=5,height=6,units="in",dpi=600)
+
+plot_grid(A,B,labels = c("A","B"),align = "h",rel_widths = c(1,.8))
+ggsave("figures/CC_CPL_rnd95confint.png",width=7,height=6,units="in",dpi=600)
+
+# Save csv file with all parameters and confidence intervals for random networks
+#
+write.csv(swtot, file="AllNetworksSLC_confint.csv")
+save.image()
+```
+
+
+# Calculate count and proportion of basal, intermediate and top predator species
+
+* Do not work well with some networks e.g. Weddell
+
+```{r ramdomSmallWorld, eval=T,echo=F,message=T,warning=T}
+require(dplyr)
+require(igraph)
+
+a_files <-list.files(path="Data/FoodWebs/",pattern="^.*\\.csv$")
+fw_basaltop <- data.frame()
+
+for (i in 1:length(a_files)){
+
+  web <- read.csv(file = paste0("Data/FoodWebs/", a_files[i]), header = T,check.names = F)
+  dw <- dim(web)
+  if(dw[2]==2 )
+  {
+    g <- graph_from_adj_list(web)
+  } else {
+    
+    if(dw[1]<dw[2]){
+      web <- web[,2:dw[2]]
+      dw <- dim(web)
+      colnames(web)
+    }
+    if(dw[1]!=dw[2]) stop(paste("non square",a_files[i]))
+  
+    g <- graph_from_adjacency_matrix(as.matrix(web))
+    V(g)$label <- colnames(web)
+  }
+  
+  calc_topological_indices(g)
+  # Number and proportion of vertices with outgoing links = basal species
+  bas.count <- length(V(g)[degree(g, mode = 'out') > 0 & degree(g, mode = 'in') == 0])
+  bas.prop <- bas.count/vcount(g)
+  
+  # Number and proportion of vertices with both incoming and outgoing links = intermediate species
+  int.count <- length(V(g)[degree(g, mode = 'out') > 0 & degree(g, mode = 'in') > 0])
+  int.prop <- int.count/vcount(g)
+  
+  # Number and proportion of vertices with incoming links = top predators
+  top.count <- length(V(g)[degree(g, mode = 'in') > 0 & degree(g, mode = 'out') == 0])
+  top.prop <- top.count/vcount(g)
+  
+  # Proportion of primary producers/consumers 
+  # 'Detritus' should be neglected as basal species (bas.count)
+  nd <- length(grep("detr", V(g)$label, ignore.case = TRUE, value=F  ))
+  
+  pp.c <- (bas.count-nd)/(int.count+top.count)
+  fw_basaltop <- bind_rows(fw_basaltop,
+                           data.frame(Network=strsplit(a_files[i],"_",fixed=T)[[1]][1],basCount=bas.count,basProp=bas.prop,intCount=int.count,intProp=int.prop,topCount=top.count,topProp=top.prop, pcProp=pp.c))
+
+}
+
+require(pander)
+panderOptions('table.split.table',Inf)
+panderOptions('table.style', 'multiline')
+
+pandoc.table(fw_basaltop)
+```
