@@ -1,7 +1,7 @@
 using Distributed
 using DataFrames
 using Optim
-using ShowProgress
+using ProgressMeter
 
 @everywhere using LightGraphs
 @everywhere using EcologicalNetworks

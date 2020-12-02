@@ -1,9 +1,11 @@
 function nitromax(numSp,C,steps)
 
-
-    A,n = nichemodelweb(numSp,C);
-    S = size(A)[1];
-    # println(S)
+    S = 0;
+    while S <= numSp/2
+        A,n = nichemodelweb(numSp,C);
+        S = size(A)[1];
+    end
+        # println(S)
 
 
     #Set 'true' interaction strengths
