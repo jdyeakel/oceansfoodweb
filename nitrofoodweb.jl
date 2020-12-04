@@ -21,10 +21,11 @@ end
 numSp=50;
 C=0.05;
 steps = 50000;
-fk = 1;
+fk = 0.8;
 
 S,
 links,
+unknownlinks,
 Q,
 startQ,
 endQ,
@@ -39,8 +40,10 @@ R"""
 par(mfrow=c(2,2))
 plot($obs_tl,$(start_tl),xlab='True trophic level',ylab='Predicted trophic level',pch=16,cex=0.5)
 plot($obs_tl,$(end_tl),xlab='True trophic level',ylab='Predicted trophic level',pch=16,cex=0.5)
-plot($(Q[links]),$(startQ[links]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5)
-plot($(Q[links]),$(endQ[links]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5)
+plot($(Q[links]),$(startQ[links]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5,col='gray')
+points($(Q[unknownlinks]),$(startQ[unknownlinks]),pch=16,cex=0.5,col='black')
+plot($(Q[links]),$(endQ[links]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5,col='gray')
+points($(Q[unknownlinks]),$(endQ[unknownlinks]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5,col='black')
 """
 
 R"""

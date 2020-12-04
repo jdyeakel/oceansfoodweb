@@ -25,7 +25,7 @@ end
 
 
 
-reps = 100;
+reps = 50;
 numSp=50;
 C=0.05;
 steps = 50000;
@@ -36,6 +36,8 @@ its = size(parametervec)[1];
 
 sr2vec = SharedArray{Float64}(length(fkvec),reps);
 er2vec = SharedArray{Float64}(length(fkvec),reps);
+sr2vecukn = SharedArray{Float64}(length(fkvec),reps);
+er2vecukn = SharedArray{Float64}(length(fkvec),reps);
 
 # @showprogress 1 "Computing..." 
 @sync @distributed for ii=1:its
@@ -47,6 +49,7 @@ er2vec = SharedArray{Float64}(length(fkvec),reps);
 
     S,
     links,
+    unknownlinks,
     Q,
     startQ,
     endQ,
@@ -61,16 +64,26 @@ er2vec = SharedArray{Float64}(length(fkvec),reps);
     R"""
     startr2 <- summary(lm($(startQ[links]) ~ $(Q[links])))$adj.r.squared
     endr2 <- summary(lm($(endQ[links]) ~ $(Q[links])))$adj.r.squared
+    startr2ukn <- summary(lm($(startQ[unknownlinks]) ~ $(Q[unknownlinks])))$adj.r.squared
+    endr2ukn <- summary(lm($(endQ[unknownlinks]) ~ $(Q[unknownlinks])))$adj.r.squared
     """
     @rget startr2;
     @rget endr2;
+    @rget startr2ukn;
+    @rget endr2ukn;
 
     sr2vec[i,r] = startr2;
     er2vec[i,r] = endr2;
+    sr2vecukn[i,r] = startr2ukn;
+    er2vecukn[i,r] = endr2ukn;
 
 end
 
+mer2 = mean(er2vec,dims=2);
+msr2 = mean(sr2vec,dims=2);
 
+mer2ukn = mean(er2vecukn,dims=2);
+msr2ukn = mean(sr2vecukn,dims=2);
 
 
 R"""

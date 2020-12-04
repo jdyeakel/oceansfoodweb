@@ -77,6 +77,9 @@ function nitromax(numSp,C,steps,fk)
     known = sort(sample(consumers,numberknown,replace=false));
 
     unknownconsumers = setdiff(consumers,known);
+    Qunknown = copy(Q);
+    #set known links to zero so that Qunknown is just unknown weights
+    Qunknown[known,:] .= 0.;
 
     #REWRITE THIS USING OPTIMIZE FUNCTION
 
@@ -86,6 +89,7 @@ function nitromax(numSp,C,steps,fk)
     temperature = 5;
     coolingrate = 0.1;
     links = findall(!iszero,Q);
+    unknownlinks = findall(!iszero,Qunknown);
     tempvec = Array{Float64}(undef,steps);
     tlvec = Array{Float64}(undef,S,steps);
     errvec =  Array{Float64}(undef,steps);
@@ -208,5 +212,5 @@ function nitromax(numSp,C,steps,fk)
     start_tl = tlvec[:,1];
     end_tl = tlvec[:,steps];
 
-    return(S,links,Q,startQ,endQ,obs_tl,start_tl,end_tl,errvec,Qerrvec,tempvec)
+    return(S,links,unknownlinks,Q,startQ,endQ,obs_tl,start_tl,end_tl,errvec,Qerrvec,tempvec)
 end
