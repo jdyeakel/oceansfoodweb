@@ -1,4 +1,4 @@
-function nitromax(numSp,C,steps)
+function nitromax(numSp,C,steps,fk)
 
     # S = 0;
     # while S <= numSp/2
@@ -7,6 +7,8 @@ function nitromax(numSp,C,steps)
     # end
         # println(S)
 
+    
+    
 
     #Set 'true' interaction strengths
     Q = quantitativeweb(A);
@@ -22,13 +24,6 @@ function nitromax(numSp,C,steps)
     tl = rtl[:,1];
     obs_tl = qtl[:,1];
     # R"plot($tl,$obs_tl)"
-
-    # #NOTE: THIS PART IS BROKEN NOW
-    # g = UnipartiteNetwork(A);
-    # q = UnipartiteQuantitativeNetwork(Q);
-    # tl = fractional_trophic_level(g);
-    # #The observed trophic level of species weighted based on assigned prop contr food to diet in Q
-    # obs_tl = trophic_level(q);
 
 
     #Build assigned nitrogen values
@@ -74,12 +69,20 @@ function nitromax(numSp,C,steps)
         linksperspecies[i] = findall(!iszero,Q[i,:]);
     end
 
+    #Choose random consumer (non-specialist!)
+    consumers = findall(x->x>1,length.(linksperspecies));
+    # specialistconsumers = findall(x->x==1,length.(linksperspecies));
+    
+    numberknown = Int64(floor(fk*length(consumers)));
+    known = sort(sample(consumers,numberknown,replace=false));
+    unknownconsumers = setdiff(consumers,known);
+
     #REWRITE THIS USING OPTIMIZE FUNCTION
 
 
     #Begin simulated annealing algorithm
     # steps = 50000;
-     temperature = 5;
+    temperature = 5;
     coolingrate = 0.1;
     links = findall(!iszero,Q);
     tempvec = Array{Float64}(undef,steps);
@@ -87,19 +90,29 @@ function nitromax(numSp,C,steps)
     errvec =  Array{Float64}(undef,steps);
     Qerrvec = Array{Float64}(undef,steps);
     #Randomly generate an initial guess
-     estQ = quantitativeweb(A);
+    estQ = quantitativeweb(A);
     # estQ = convert(Array{Float64},A);
     # estQ[1:length(estQ)] = estQ[1:length(estQ)] .* (repeat(1./convert.(Float64,length.(linksperspecies)),outer=size(Q)[1]));
     # estQ[find(isnan,estQ)] = 0;
+    
+    #Plug in known consumer weights
+    if length(known) > 0
+        estQ[known,:] .= Q[known,:];
+    end
+
     startQ = copy(estQ);
+
     #Calculate the initial error
-     pred_tl, err = calcerror(estQ,est_tl);
+    pred_tl, err = calcerror(estQ,est_tl);
 
     tlvec[:,1] = pred_tl;
     errvec[1] = err;
     tempvec[1] = temperature;
     # Qerrvec[1] = mean(sqrt.((Q[links].-estQ[links]).^2));
     Qerrvec[1] = sum((Q[links].-estQ[links]).^2);
+
+
+
     for i=2:steps
         
         # if mod(i,1000) == 0
@@ -116,22 +129,26 @@ function nitromax(numSp,C,steps)
         newestQ = copy(estQ);
         
         #Choose random consumer
-        consumers = findall(x->x>1,length.(linksperspecies));
+        # consumers = findall(x->x>1,length.(linksperspecies));
+        
+
+        
+        # unknowngenconsumers = setdiff(unknownconsumers,specialistconsumers);
         
         #Choose number of species to adjust based on temperature
         # numsp = minimum([length(consumers),maximum([1,Int64(round(20*temperature,digits=0))])]);
         numsp = 1;
-        sptoadjust = rand(consumers,numsp);
-        
-        for j=sptoadjust
-            slinks = linksperspecies[j];
-            #choose link to alter
-            linktochange = rand(slinks);
-            newestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
-            #rescale
-            newestQ[j,:] = newestQ[j,:]./(sum(newestQ[j,:]));
+        sptoadjust = sample(unknownconsumers,numsp,replace=false);
+        if length(sptoadjust) > 0
+            for j=sptoadjust
+                slinks = linksperspecies[j];
+                #choose link to alter
+                linktochange = rand(slinks);
+                newestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
+                #rescale
+                newestQ[j,:] = newestQ[j,:]./(sum(newestQ[j,:]));
+            end
         end
-        
 
         pred_tl_new,err_new = calcerror(newestQ,est_tl);
         
@@ -160,8 +177,8 @@ function nitromax(numSp,C,steps)
              temperature = maximum([0.00001,temperature * ((err_new)/(err))]);
         
             #Accept new changes
-             estQ = copy(newestQ);
-             err = copy(err_new);
+            estQ = copy(newestQ);
+            err = copy(err_new);
         else
             #roll dice
             # rdraw = rand();
@@ -174,45 +191,6 @@ function nitromax(numSp,C,steps)
             #      err = copy(err_new);
             # end
         end
-        
-        # #Parallelized annealing sampler
-        # sprob = exp( (err_old - err_new) / temperature );
-        # sdraw = rand();
-        # if sdraw < sprob
-        #     nproc = 80;
-        #     parerr = SharedArray{Float64}(nproc);
-        #     parnewestQvec = SharedArray{Float64}(nproc,size(Q)[1]);
-        #     parsp = SharedArray{Int64}(nproc);
-        #     @sync @parallel for p = 1:nproc
-        #         #Sample across processors
-        #         newdist = Normal(0,1);
-        # 
-        #         #for each species, modify links - 1, and scale the last
-        #         parnewestQ = copy(estQ);
-        # 
-        #         #Choose random consumer
-        #         consumers = find(x->x>1,length.(linksperspecies));
-        #         j = rand(consumers);
-        #         slinks = linksperspecies[j];
-        #         #choose link to alter
-        #         linktochange = rand(slinks);
-        #         parnewestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
-        #         #rescale
-        #         parnewestQ[j,:] = parnewestQ[j,:]./(sum(parnewestQ[j,:]));
-        # 
-        #         parpred_tl_new,parerr_new = calcerror(parnewestQ,est_tl);
-        #         parerr[p] = parerr_new;
-        #         parnewestQvec[p,:] = parnewestQ[j,:];
-        #         parsp[p] = j;
-        #     end
-        #     minparerr = findmin(parerr)[2];
-        #     if parerr[minparerr] < err
-        #         #Accept new changes
-        #         err = copy(err_new);
-        #         estQ[parsp[minparerr],:] = parnewestQvec[minparerr,:];
-        #     end
-        # end
-        # 
         
         
         #record temperature

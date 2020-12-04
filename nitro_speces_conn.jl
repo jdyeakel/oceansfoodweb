@@ -1,20 +1,19 @@
 using Distributed
 using DataFrames
 using Optim
-using ProgressMeter
-
+@everywhere using ProgressMeter
 @everywhere using LightGraphs
 @everywhere using EcologicalNetworks
 @everywhere using Distributions
 @everywhere using RCall
 @everywhere using SharedArrays
-# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
-# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
-# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
+@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
+@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
+@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
 
-@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/nichemodelweb.jl");
-@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/quantitativeweb.jl");
-@everywhere include("$(homedir())/oceansfoodweb/foodweb_model/src/nitromax.jl");
+@everywhere include("$(homedir())/oceansfoodweb/src/nichemodelweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/src/quantitativeweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/src/nitromax.jl");
 
 #measure error
 @everywhere function calcerror(Q,est_tl)
@@ -44,8 +43,10 @@ its = size(parametervec)[1];
 sr2vec = SharedArray{Float64}(lspvec,lcvec,reps);
 er2vec = SharedArray{Float64}(lspvec,lcvec,reps);
 
+#Fraction of consumers known
+fk = 0.0;
 
-@showprogress 1 "Computing..." @sync @distributed for ii=1:its
+@showprogress 1 "Computing..." @distributed for ii=1:its
     i = parametervec[ii,1];
     j = parametervec[ii,2];
     r = parametervec[ii,3];
@@ -63,7 +64,7 @@ er2vec = SharedArray{Float64}(lspvec,lcvec,reps);
     end_tl,
     errvec,
     Qerrvec,
-    tempvec = nitromax(numSp,C,steps);
+    tempvec = nitromax(numSp,C,steps,fk);
 
     R"""
     startr2 <- summary(lm($(startQ[links]) ~ $(Q[links])))$adj.r.squared

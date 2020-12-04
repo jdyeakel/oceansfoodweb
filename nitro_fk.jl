@@ -1,10 +1,8 @@
 using Distributed
-using DataFrames
-using Optim
+using SharedArrays
 
 @everywhere using ProgressMeter
 @everywhere using LightGraphs
-@everywhere using EcologicalNetworks
 @everywhere using Distributions
 @everywhere using RCall
 @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
@@ -21,22 +19,54 @@ using Optim
 end
 
 
+
+reps = 100;
 numSp=50;
 C=0.05;
 steps = 50000;
-fk = 0.5;
+fkvec = collect(0:0.1:1);
 
-S,
-links,
-Q,
-startQ,
-endQ,
-obs_tl,
-start_tl,
-end_tl,
-errvec,
-Qerrvec,
-tempvec = nitromax(numSp,C,steps,fk);
+parametervec = [repeat(collect(1:length(fkvec)),inner=reps) repeat(collect(1:reps),outer=length(fkvec))];
+its = size(parametervec)[1];
+
+sr2vec = SharedArray{Float64}(length(fkvec),reps);
+er2vec = SharedArray{Float64}(length(fkvec),reps);
+
+# @showprogress 1 "Computing..." 
+@sync @distributed for ii=1:its
+
+    i = parametervec[ii,1];
+    r = parametervec[ii,2];
+    
+    fk = fkvec[i];
+
+    S,
+    links,
+    Q,
+    startQ,
+    endQ,
+    obs_tl,
+    start_tl,
+    end_tl,
+    errvec,
+    Qerrvec,
+    tempvec = nitromax(numSp,C,steps,fk);
+
+
+    R"""
+    startr2 <- summary(lm($(startQ[links]) ~ $(Q[links])))$adj.r.squared
+    endr2 <- summary(lm($(endQ[links]) ~ $(Q[links])))$adj.r.squared
+    """
+    @rget startr2;
+    @rget endr2;
+
+    sr2vec[i,r] = startr2;
+    er2vec[i,r] = endr2;
+
+end
+
+
+
 
 R"""
 par(mfrow=c(2,2))
