@@ -75,6 +75,7 @@ function nitromax(numSp,C,steps,fk)
     
     numberknown = Int64(floor(fk*length(consumers)));
     known = sort(sample(consumers,numberknown,replace=false));
+
     unknownconsumers = setdiff(consumers,known);
 
     #REWRITE THIS USING OPTIMIZE FUNCTION
@@ -138,8 +139,8 @@ function nitromax(numSp,C,steps,fk)
         #Choose number of species to adjust based on temperature
         # numsp = minimum([length(consumers),maximum([1,Int64(round(20*temperature,digits=0))])]);
         numsp = 1;
-        sptoadjust = sample(unknownconsumers,numsp,replace=false);
-        if length(sptoadjust) > 0
+        if length(unknownconsumers) > 0
+            sptoadjust = sample(unknownconsumers,numsp,replace=false);
             for j=sptoadjust
                 slinks = linksperspecies[j];
                 #choose link to alter

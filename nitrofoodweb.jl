@@ -1,10 +1,7 @@
 using Distributed
-using DataFrames
-using Optim
 
 @everywhere using ProgressMeter
 @everywhere using LightGraphs
-@everywhere using EcologicalNetworks
 @everywhere using Distributions
 @everywhere using RCall
 @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
@@ -24,7 +21,7 @@ end
 numSp=50;
 C=0.05;
 steps = 50000;
-fk = 0.5;
+fk = 1;
 
 S,
 links,

@@ -5,9 +5,14 @@ using SharedArrays
 @everywhere using LightGraphs
 @everywhere using Distributions
 @everywhere using RCall
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
-@everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nichemodelweb.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/quantitativeweb.jl");
+# @everywhere include("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/src/nitromax.jl");
+
+@everywhere include("$(homedir())/oceansfoodweb/src/nichemodelweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/src/quantitativeweb.jl");
+@everywhere include("$(homedir())/oceansfoodweb/src/nitromax.jl");
+
 @everywhere function calcerror(Q,est_tl)
     # q = UnipartiteQuantiNetwork(Q);
     # pred_tl = trophic_level(q);
