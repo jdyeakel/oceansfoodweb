@@ -19,9 +19,10 @@ end
 
 
 numSp=50;
-C=0.05;
+C=0.1;
 steps = 50000;
-fk = 0.8;
+fk = 0.25;
+minlink = 0.25
 
 S,
 links,
@@ -34,7 +35,14 @@ start_tl,
 end_tl,
 errvec,
 Qerrvec,
-tempvec = nitromax(numSp,C,steps,fk);
+tempvec = nitromax(numSp,C,steps,fk,minlink);
+
+slinks = findall(x->x>minlink,Q[unknownlinks]);
+R"""
+sr2 <- summary(lm($(startQ[unknownlinks][slinks]) ~ $(Q[unknownlinks][slinks])))$adj.r.squared
+er2 <- summary(lm($(endQ[unknownlinks][slinks]) ~ $(Q[unknownlinks][slinks])))$adj.r.squared
+print(c(sr2,er2))
+"""
 
 R"""
 par(mfrow=c(2,2))
@@ -46,10 +54,13 @@ plot($(Q[links]),$(endQ[links]),xlab='True interaction strengths',ylab='Predicte
 points($(Q[unknownlinks]),$(endQ[unknownlinks]),xlab='True interaction strengths',ylab='Predicted interaction strengths',pch=16,cex=0.5,col='black')
 """
 
+
+
+
 R"""
 par(mfrow=c(1,2))
-plot($errvec,xlab='Annealing time',ylab='Trophic level error',type='l',lwd=0.5)
-plot($Qerrvec,xlab='Annealing time',ylab='Interaction strength error',type='l',lwd=0.5)
+plot($errvec,xlab='Annealing time',ylab='Trophic level error',type='l',lwd=0.5,log='x')
+plot($Qerrvec,xlab='Annealing time',ylab='Interaction strength error',type='l',lwd=0.5,log='x')
 """
 
 

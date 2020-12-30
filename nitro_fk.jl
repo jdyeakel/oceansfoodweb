@@ -27,7 +27,8 @@ end
 
 reps = 50;
 numSp=50;
-C=0.05;
+C=0.1;
+minlink = 0.25
 steps = 50000;
 fkvec = collect(0:0.1:1);
 
@@ -58,14 +59,17 @@ er2vecukn = SharedArray{Float64}(length(fkvec),reps);
     end_tl,
     errvec,
     Qerrvec,
-    tempvec = nitromax(numSp,C,steps,fk);
+    tempvec = nitromax(numSp,C,steps,fk,minlink);
 
+    #measure just the stronger links (0.4 to 1)
+    #i.e. we are measuring how much we are improving (hopefully) just links with true weights > 0.4
+    slinks = findall(x->x>0.4,Q[unknownlinks]);
 
     R"""
-    startr2 <- summary(lm($(startQ[links]) ~ $(Q[links])))$adj.r.squared
-    endr2 <- summary(lm($(endQ[links]) ~ $(Q[links])))$adj.r.squared
-    startr2ukn <- summary(lm($(startQ[unknownlinks]) ~ $(Q[unknownlinks])))$adj.r.squared
-    endr2ukn <- summary(lm($(endQ[unknownlinks]) ~ $(Q[unknownlinks])))$adj.r.squared
+    startr2 <- summary(lm($(startQ[links][slinks]) ~ $(Q[links][slinks])))$adj.r.squared
+    endr2 <- summary(lm($(endQ[links][slinks]) ~ $(Q[links][slinks])))$adj.r.squared
+    startr2ukn <- summary(lm($(startQ[unknownlinks][slinks]) ~ $(Q[unknownlinks][slinks])))$adj.r.squared
+    endr2ukn <- summary(lm($(endQ[unknownlinks][slinks]) ~ $(Q[unknownlinks][slinks])))$adj.r.squared
     """
     @rget startr2;
     @rget endr2;
@@ -79,11 +83,11 @@ er2vecukn = SharedArray{Float64}(length(fkvec),reps);
 
 end
 
-mer2 = mean(er2vec,dims=2);
-msr2 = mean(sr2vec,dims=2);
+mer2 = vec(mean(er2vec,dims=2));
+msr2 = vec(mean(sr2vec,dims=2));
 
-mer2ukn = mean(er2vecukn,dims=2);
-msr2ukn = mean(sr2vecukn,dims=2);
+mer2ukn = vec(mean(er2vecukn,dims=2));
+msr2ukn = vec(mean(sr2vecukn,dims=2));
 
 
 R"""

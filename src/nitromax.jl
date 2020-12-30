@@ -1,4 +1,4 @@
-function nitromax(numSp,C,steps,fk)
+function nitromax(numSp,C,steps,fk,minlink)
 
     # S = 0;
     # while S <= numSp/2
@@ -67,6 +67,10 @@ function nitromax(numSp,C,steps,fk)
     linksperspecies = Array{Array}(undef,S);
     for i=1:S
         linksperspecies[i] = findall(!iszero,Q[i,:]);
+    end
+    stronglinksperspecies = Array{Array}(undef,S);
+    for i=1:S
+        stronglinksperspecies[i] = findall(x->x>minlink,Q[i,:]);
     end
 
     #Choose random consumer (non-specialist!)
@@ -146,12 +150,14 @@ function nitromax(numSp,C,steps,fk)
         if length(unknownconsumers) > 0
             sptoadjust = sample(unknownconsumers,numsp,replace=false);
             for j=sptoadjust
-                slinks = linksperspecies[j];
+                slinks = stronglinksperspecies[j];
                 #choose link to alter
-                linktochange = rand(slinks);
-                newestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
-                #rescale
-                newestQ[j,:] = newestQ[j,:]./(sum(newestQ[j,:]));
+                if length(slinks) > 0
+                    linktochange = rand(slinks);
+                    newestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
+                    #rescale
+                    newestQ[j,:] = newestQ[j,:]./(sum(newestQ[j,:]));
+                end
             end
         end
 
