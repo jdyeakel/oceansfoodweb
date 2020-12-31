@@ -10,9 +10,14 @@ function lfunc(x,A,massvec)
     massvec_prey = massvec;
     
     L = Array{Float64}(undef,1);
+
+    #instead of looping over ALL SPECIES, loop only across consumers
+    numpreyperpred = vec(sum(A,dims=1));
+    consumers = findall(!iszero,numpreyperpred);
     
     let cumLij = 0.0
-        for i=1:numpred
+        for i=consumers
+        # for i=1:numpred
             for j=1:numprey
                 # if i != j
                     

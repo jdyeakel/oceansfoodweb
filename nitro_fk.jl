@@ -27,10 +27,10 @@ end
 
 reps = 50;
 numSp=50;
-C=0.1;
+C=0.05;
 minlink = 0.25
 steps = 50000;
-fkvec = collect(0:0.1:1);
+fkvec = collect(0:0.05:1);
 
 parametervec = [repeat(collect(1:length(fkvec)),inner=reps) repeat(collect(1:reps),outer=length(fkvec))];
 its = size(parametervec)[1];
@@ -88,6 +88,15 @@ msr2 = vec(mean(sr2vec,dims=2));
 
 mer2ukn = vec(mean(er2vecukn,dims=2));
 msr2ukn = vec(mean(sr2vecukn,dims=2));
+
+# lineplot(mer2ukn .- msr2ukn)
+
+using Plots
+using Plots.PlotMeasures
+p1=plot(fkvec[1:20],mer2ukn[1:20] .- msr2ukn[1:20],size=(500,400),xlabel = "Proportion known",
+ylabel = "R2 end - R2 start",left_margin=15mm,bottom_margin=5mm);
+savefig("$(homedir())/oceansfoodweb/figures_yog/fk_r2_cdot05.pdf")
+
 
 
 R"""
