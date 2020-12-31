@@ -48,15 +48,19 @@ A_pc = A_pc[keep2,keep2];
 massvec_pc = massvec_pc[keep2];
 
 ## BARENTS SEA
+# NOTE: NEED TO REMOVE DETRITUS, ETC
+
 Aprime_bts = Matrix(Adata_bts[1:159,2:160]);
 role_bts = massdata_bts[!,:role];
 #Exclude primary producers (role = 1), baleen whales (role = 4) and birds (role=3)
 keep = findall(x->x>1 && x<3,role_bts);
 A_bts = Aprime_bts[keep,keep];
 massvec_bts = massdata_bts[!,:length_cm][keep];
-keep2 = findall(x->x<5,massvec_bts);
+namesvec_bts = Adata_bts[!,:species][keep];
+keep2 = findall(x->x>1,massvec_bts);
 A_bts = A_bts[keep2,keep2];
 massvec_bts = massvec_bts[keep2];
+namesvec_bts = namesvec_bts[keep2];
 
 
 #######################
@@ -76,7 +80,7 @@ x0 = [0.0,0.0,0.0];
 Anull_bg = nullweb(A_bg);
 resultsnull_bg = optimize(x->lfunc(x,Anull_bg,massvec_bg),x0,NelderMead());
 resultsnull_bg.minimizer
-xmax = results_bg.minimizer;
+xmax = resultsnull_bg.minimizer;
 fcorrnull_bg, Apredictnull_bg = fc(xmax,Anull_bg,massvec_bg)
 
 ## POTTERS COVE
@@ -84,7 +88,15 @@ x0 = [0.0,0.0,0.0];
 results_pc = optimize(x->lfunc(x,A_pc,massvec_pc),x0,NelderMead());
 results_pc.minimizer
 xmax = results_pc.minimizer;
-fc(xmax,A_pc,massvec_pc)
+fcorr_pc, Apredict_pc = fc(xmax,A_pc,massvec_pc)
+
+
+x0 = [0.0,0.0,0.0];
+Anull_pc = nullweb(A_pc);
+resultsnull_pc = optimize(x->lfunc(x,Anull_pc,massvec_pc),x0,NelderMead());
+resultsnull_pc.minimizer
+xmax = resultsnull_pc.minimizer;
+fcorrnull_pc, Apredictnull_pc = fc(xmax,Anull_pc,massvec_pc)
 
 ## BARENTS SEA
 x0 = [0.0,0.0,0.0];
@@ -123,7 +135,7 @@ p2=heatmap(Array{Int64}(Asort_pc),zlims=(0,1));
 p3=heatmap(Array{Int64}(Asort_bts),zlims=(0,1));
 p4=heatmap(Array{Int64}(Anull_bts),zlims=(0,1));
 plot(p1,p2,p3,p4,layout=(2,2),size=(1500,1000))
-savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/fig.pdf")
+savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/fig_cons.pdf")
 
 
 sortsp = sortperm(massvec_bts);
@@ -134,7 +146,7 @@ p2=heatmap(Array{Int64}(Anull_bts),zlims=(0,1));
 p3=heatmap(Array{Float64}(Apredict_bts[sortsp,sortsp]),zlims=(0,1));
 p4=heatmap(Array{Float64}(Apredictnull_bts[sortsp,sortsp]),zlims=(0,1));
 plot(p1,p2,p3,p4,layout=(2,2),size=(1500,1000))
-savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/Anull_bts.pdf")
+savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/Anull_bts_cons.pdf")
 
 
 sortsp = sortperm(massvec_bg);
@@ -145,4 +157,13 @@ p2=heatmap(Array{Int64}(Anull_bg),zlims=(0,1));
 p3=heatmap(Array{Float64}(Apredict_bg[sortsp,sortsp]),zlims=(0,1));
 p4=heatmap(Array{Float64}(Apredictnull_bg[sortsp,sortsp]),zlims=(0,1));
 plot(p1,p2,p3,p4,layout=(2,2),size=(1500,1000))
-savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/Anull_bg.pdf")
+savefig("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/Anull_bg_cons.pdf")
+
+sortsp = sortperm(massvec_pc);
+Asort_pc = A_pc[sortsp,sortsp];
+Anull_pc = Anull_pc[sortsp,sortsp];
+p1=heatmap(Array{Int64}(Asort_pc),zlims=(0,1));
+p2=heatmap(Array{Int64}(Anull_pc),zlims=(0,1));
+p3=heatmap(Array{Float64}(Apredict_pc[sortsp,sortsp]),zlims=(0,1));
+p4=heatmap(Array{Float64}(Apredictnull_pc[sortsp,sortsp]),zlims=(0,1));
+plot(p1,p2,p3,p4,layout=(2,2),size=(1500,1000))

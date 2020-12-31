@@ -1,7 +1,7 @@
 species,mass_g,length_cm,role,notes,link
-Detritus,,0.0001,2,,
+Detritus,,0.0001,1,,
 Autothroph_flagellat,,1,1,,"https://academic.oup.com/plankt/article/28/4/345/1569658#:~:text=Heterotrophic%20flagellates%20%3C5%20%C2%B5m%20were,9%20and%2012%20%C2%B5m%2C%20respectively."
-Bacteria_indet,,0.0005,2,,https://en.wikipedia.org/wiki/Bacteria
+Bacteria_indet,,0.0005,1,,https://en.wikipedia.org/wiki/Bacteria
 Diatom,,0.01,2,Diatoms; 100 micrometers,https://en.wikipedia.org/wiki/Diatom#:~:text=Diatoms%20are%202%20to%20200%20micrometers%20in%20length.
 Heterotroph_flagellat,,0.00035,2,,"https://academic.oup.com/plankt/article/28/4/345/1569658#:~:text=Heterotrophic%20flagellates%20%3C5%20%C2%B5m%20were,9%20and%2012%20%C2%B5m%2C%20respectively."
 Ice_algae,,1,1,,

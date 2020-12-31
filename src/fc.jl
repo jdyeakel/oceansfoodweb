@@ -11,12 +11,16 @@ function fc(xmax,A,massvec)
 
     Apredict = copy(A).*0.0;
 
+    numpreyperpred = vec(sum(A,dims=1));
+    consumers = findall(!iszero,numpreyperpred);
+
     # global cumnum = 0.0;
     # global cumdenom = 0.0;
     # cnumerator = Array{Float64}(undef,1);
     # cdenominator = Array{Float64}(undef,1);
     let cumnum = 0.0, cumdenom = 0.0
-        for i=1:numpred
+        for i=consumers
+        # for i=1:numpred
             for j=1:numprey
 
                 # if i != j
