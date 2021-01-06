@@ -81,6 +81,7 @@ function nitromax(numSp,C,steps,fk,minlink)
     known = sort(sample(consumers,numberknown,replace=false));
 
     unknownconsumers = setdiff(consumers,known);
+    unknownconsumerswstronglinks = intersect(unknownconsumers,vec(findall(!iszero,length.(stronglinksperspecies))));
     Qunknown = copy(Q);
     #set known links to zero so that Qunknown is just unknown weights
     Qunknown[known,:] .= 0.;
@@ -143,22 +144,26 @@ function nitromax(numSp,C,steps,fk,minlink)
 
         
         # unknowngenconsumers = setdiff(unknownconsumers,specialistconsumers);
-        
+        println(temperature)
         #Choose number of species to adjust based on temperature
         # numsp = minimum([length(consumers),maximum([1,Int64(round(20*temperature,digits=0))])]);
         numsp = 1;
-        if length(unknownconsumers) > 0
-            sptoadjust = sample(unknownconsumers,numsp,replace=false);
-            for j=sptoadjust
+        if length(unknownconsumerswstronglinks) > 0
+            #1/2/2021 modified this to choose only among unknown species with strong links
+            sptoadjust = sample(unknownconsumerswstronglinks,numsp,replace=false)[1];
+            # for j=sptoadjust
+            j = copy(sptoadjust);
+            println(j)
+            println(stronglinksperspecies)
                 slinks = stronglinksperspecies[j];
                 #choose link to alter
-                if length(slinks) > 0
-                    linktochange = rand(slinks);
+                # if length(slinks) > 0
+                    linktochange = sample(slinks,1,replace=false);
                     newestQ[j,linktochange] = maximum([minimum([0.99,estQ[j,linktochange]*(1+rand(newdist))]),0.001]);
                     #rescale
                     newestQ[j,:] = newestQ[j,:]./(sum(newestQ[j,:]));
-                end
-            end
+                # end
+            # end
         end
 
         pred_tl_new,err_new = calcerror(newestQ,est_tl);

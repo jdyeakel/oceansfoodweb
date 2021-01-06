@@ -22,7 +22,7 @@ numSp=50;
 C=0.1;
 steps = 50000;
 fk = 0.25;
-minlink = 0.25
+minlink = 0.1;
 
 S,
 links,
