@@ -54,9 +54,13 @@ for i=1:ns
     end
 end
 
+#sort by body mass
+bm_sortperm = sortperm(nw_mass[occur]);
+amatrix_sort = amatrix[bm_sortperm,bm_sortperm];
+
 #Calculate trophic level
 R"library(NetIndices)"
-R"ctl <- TrophInd($(amatrix))[,1]"
+R"ctl <- TrophInd($(amatrix_sort))[,1]"
 @rget ctl;
 ctlcolors = Int64.(round.(ctl .* 10));
 ctlcolors = ctlcolors .- minimum(ctlcolors) .+ 1;
@@ -67,13 +71,13 @@ library(igraph)
 library(plot.matrix)
 library(RColorBrewer)
 pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max($ctlcolors))
-agraph = graph_from_adjacency_matrix($amatrix)
+agraph = graph_from_adjacency_matrix($amatrix_sort)
 lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl
 pdf($namespace,width=12,height=6)
 par(mfrow=c(1,2))
-plot($amatrix,axis.col=3,main='',key=NULL)
+plot($amatrix_sort,axis.col=3,main='',key=NULL)
 plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white')
 dev.off()
 """
