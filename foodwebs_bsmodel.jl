@@ -3,7 +3,7 @@ using Distributions
 using LinearAlgebra
 using DataFrames
 using CSV
-
+using RCall
 
 
 
@@ -24,11 +24,12 @@ trophic = nw_bs[!,Symbol("trophic")];
 
 occur = findall(!iszero,nw_bs[!,Symbol("1700")]);
 ns = length(occur);
+nc = length(findall(x->x>1,trophic));
 amatrix = Array{Int64}(undef,ns,ns) .* 0;
 
 #Loop across consumers
 for i=1:ns
-    if trophic[occur[i]] > 0
+    if trophic[occur[i]] > 1
         # Loop across prey
         # The while loop means that all consumers will have at least one prey
         while sum(amatrix[:,i]) < 1
@@ -53,5 +54,26 @@ for i=1:ns
     end
 end
 
+#Calculate trophic level
+R"library(NetIndices)"
+R"ctl <- TrophInd($(amatrix))[,1]"
+@rget ctl;
+ctlcolors = Int64.(round.(ctl .* 10));
+ctlcolors = ctlcolors .- minimum(ctlcolors) .+ 1;
 
-
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_rough.pdf";
+R"""
+library(igraph)
+library(plot.matrix)
+library(RColorBrewer)
+pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max($ctlcolors))
+agraph = graph_from_adjacency_matrix($amatrix)
+lay <- layout.fruchterman.reingold(agraph)
+# lay <- layout_on_sphere(agraph)
+lay[,2] <- ctl
+pdf($namespace,width=12,height=6)
+par(mfrow=c(1,2))
+plot($amatrix,axis.col=3,main='',key=NULL)
+plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white')
+dev.off()
+"""

@@ -12,12 +12,12 @@ Harp seal,2,140,190,1,0,1
 Harbour seals,2,50,150,0,0,0
 Walrus,2,1000,2000,1,0,0
 Greenland Shark,2,500,1200,1,1,1
-Atlantic Salmon,1,5,25,1,0,0
-Rock Fish,1,3,5,1,0,1
+Atlantic Salmon,2,5,25,1,0,0
+Rock Fish,2,3,5,1,0,1
 Sandlance,1,0.050,0.5,1,1,1
 Atlantic Herring,1,0.05,0.5,1,1,1
-Pollock ,1,3,20,1,1,1
-Haddock,1,1,3,1,1,1
+Pollock ,2,3,20,1,1,1
+Haddock,2,1,3,1,1,1
 White-sided Dolphin,2,200,200,1,1,1
 Caplin,1,0.02,0.1,1,1,1
 Shrimp,1,0.02,0.1,1,1,1
