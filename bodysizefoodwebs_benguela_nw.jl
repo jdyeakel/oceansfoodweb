@@ -55,6 +55,11 @@ fcorrnull_bg, Apredictnull_bg = fc(xmax,Anull_bg,massvec_bg)
 sortsp_bg = sortperm(massvec_bg);
 Asort_bg = A_bg[sortsp_bg,sortsp_bg];
 
+#Sort and isolate consumers only from Apredict
+Apredict_bg_sort = Apredict_bg[sortsp_bg,sortsp_bg];
+cons = findall(x->x>0,vec(sum(Apredict_bg_sort,dims=1)));
+Apredict_bg_sort_cons = Apredict_bg_sort[cons,cons];
+
 # use xmax to build a random food web
 
 nw_bs = CSV.read("$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/foodwebdata_raw/NWAtlantic/bodysizedata.csv",header=true);
@@ -65,30 +70,53 @@ nw_mass = vec(mean([nw_minmass nw_maxmass],dims=2));
 trophic = nw_bs[!,Symbol("trophic")];
 date = "1700";
 occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+id1700 = collect(1:length(nw_mass))[occur];
 bgmatrix_1700 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
 
 date = "2000";
 occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+id2000 = collect(1:length(nw_mass))[occur];
 bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
 
 
-preymasses = collect(1:10:1000);
-predmasses = collect(1:10:1000);
-lm = length(preymasses);
-pijarray = Array{Float64}(undef,lm,lm);
+preymasses = [10^i for i=collect(1:0.1:4)];
+predmasses = [10^i for i=collect(1:0.1:4)];
+lpy = length(preymasses);
+lpd = length(predmasses);
+pijarray = Array{Float64}(undef,lpd,lpy);
 alpha = xmax_bg[1];
 beta = xmax_bg[2];
 gamma = xmax_bg[3];
-for i=1:lm
+for i=1:lpd
     mi = predmasses[i];
-    for j=1:lm
+    for j=1:lpy
         mj = preymasses[j];
         pij = exp(alpha + beta*log(mi/mj) + gamma*log(mi/mj)^2)/(1+exp(alpha + beta*log(mi/mj) + gamma*log(mi/mj)^2));
-        pijarray[i,j] = pij;
+        pijarray[i,j] = pij/(1+pij);
     end
 end
 
+# Calculate some network metrics
+reps = 1000;
+rich = Array{Float64}(undef,reps,2);
+conn = Array{Float64}(undef,reps,2);
+for r=1:reps
+    date = "1700";
+    occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+    id1700 = collect(1:length(nw_mass))[occur];
+    bgmatrix_1700 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
 
+    rich[r,1] = size(bgmatrix_1700)[1]
+    conn[r,1] = sum(bgmatrix_1700)/size(bgmatrix_1700)[1]^2;
+
+    date = "2000";
+    occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+    id2000 = collect(1:length(nw_mass))[occur];
+    bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+
+    rich[r,2] = size(bgmatrix_2000)[1]
+    conn[r,2] = sum(bgmatrix_2000)/size(bgmatrix_2000)[1]^2;
+end
 
 
 
@@ -147,15 +175,24 @@ ctlcolors_2000 = ctlcolors_2000 .- minimum(ctlcolors_2000) .+ 1;
 namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panel.pdf";
 R"""
 library(igraph)
+library(fields)
 library(plot.matrix)
 library(RColorBrewer)
 pdf($namespace,width=14,height=12)
 par(mfrow=c(2,2))
-pijpal = brewer.pal(9,'YlGnBu')
 
-plot($(pijarray),main='',border=NA,col=pijpal,xlab='Pred mass (kg)',ylab='Prey mass (kg)')
+pal = rev(brewer.pal(9,'YlOrRd'))
+pijarray = $pijarray
+rownames(pijarray) = $predmasses
+colnames(pijarray) = $preymasses
+# plot((pijarray),main='',border=NA,col=pal,xlab='Pred mass (kg)',ylab='Prey mass (kg)')
+image.plot(x=$predmasses,y=$preymasses,z=$pijarray,col=pal,legend.args=list(text='     Pr(link)',
+side=3,
+line=.5)
+)
 
-plot(1-$(Apredict_bg[sortsp_bg,sortsp_bg]),axis.col=3,main='')
+pal = rev(brewer.pal(9,'YlGnBu'))
+plot($(Apredict_bg_sort_cons),axis.col=3,main='',col=pal)
 
 # plot($(bgmatrix_1700),axis.col=3,main='',key=NULL)
 pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max(c($ctlcolors_1700,$ctlcolors_2000)))
@@ -163,7 +200,7 @@ agraph = graph_from_adjacency_matrix($(bgmatrix_1700))
 lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl_1700
-plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_1700],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white')
+plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_1700],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id1700)
 
 # plot($(bgmatrix_2000),axis.col=3,main='',key=NULL)
 # pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max($ctlcolors_2000))
@@ -171,6 +208,6 @@ agraph = graph_from_adjacency_matrix($(bgmatrix_2000))
 lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl_2000
-plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_2000],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white')
+plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_2000],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id2000)
 dev.off()
 """
