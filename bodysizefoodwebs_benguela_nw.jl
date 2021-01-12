@@ -97,25 +97,117 @@ for i=1:lpd
 end
 
 # Calculate some network metrics
-reps = 1000;
+R"""
+library(UNODF)
+"""
+reps = 5000;
 rich = Array{Float64}(undef,reps,2);
 conn = Array{Float64}(undef,reps,2);
+nest = Array{Float64}(undef,reps,2);
+mod = Array{Float64}(undef,reps,2);
+nind2 = Array{Float64}(undef,reps,2);
+nind3 = Array{Float64}(undef,reps,2);
+
+nind2_1700_sp = Array{Float64}(undef,reps,23);
+nind3_1700_sp = Array{Float64}(undef,reps,23);
+
+nind2_2000_sp = Array{Float64}(undef,reps,17);
+nind3_2000_sp = Array{Float64}(undef,reps,17);
+
+
 for r=1:reps
     date = "1700";
     occur = findall(!iszero,nw_bs[!,Symbol(date)]);
     id1700 = collect(1:length(nw_mass))[occur];
     bgmatrix_1700 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+    rich_1700 = size(bgmatrix_1700)[1];
+    R"""
+    unodfvalue = suppressWarnings(unodf($bgmatrix_1700,selfloop=TRUE))
+    nestvalue_c = unodfvalue$UNODFc
+    nestvalue_r = unodfvalue$UNODFr
+    """
+    @rget nestvalue_c;
+    @rget nestvalue_r;
+    nest_1700 = mean([nestvalue_c,nestvalue_r]);
 
-    rich[r,1] = size(bgmatrix_1700)[1]
+    R"""
+    g_ud <- as.undirected(graph.adjacency($bgmatrix_1700));
+    wtc <- cluster_walktrap(g_ud);
+    mod_1700 <- modularity(g_ud,membership(wtc));
+    """
+    @rget mod_1700;
+
+    #number of indirect paths
+    # 3
+    aprime2_1700 = bgmatrix_1700^2;
+    nind2_1700 = sum(aprime2_1700);
+    aprime3_1700 = bgmatrix_1700^3;
+    nind3_1700 = sum(aprime3_1700);
+
+    
+    rich[r,1] = rich_1700;
     conn[r,1] = sum(bgmatrix_1700)/size(bgmatrix_1700)[1]^2;
+    nest[r,1] = nest_1700;
+    mod[r,1] = mod_1700;
+    nind2[r,1] = nind2_1700;
+    nind3[r,1] = nind3_1700;
 
     date = "2000";
     occur = findall(!iszero,nw_bs[!,Symbol(date)]);
     id2000 = collect(1:length(nw_mass))[occur];
     bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+    rich_2000 = size(bgmatrix_2000)[1];
+    R"""
+    unodfvalue = suppressWarnings(unodf($bgmatrix_2000,selfloop=TRUE))
+    nestvalue_c = unodfvalue$UNODFc
+    nestvalue_r = unodfvalue$UNODFr
+    """
+    @rget nestvalue_c;
+    @rget nestvalue_r;
+    nest_2000 = mean([nestvalue_c,nestvalue_r]);
 
-    rich[r,2] = size(bgmatrix_2000)[1]
+    R"""
+    g_ud <- as.undirected(graph.adjacency($bgmatrix_2000));
+    wtc <- cluster_walktrap(g_ud);
+    mod_2000 <- modularity(g_ud,membership(wtc));
+    """
+    @rget mod_2000;
+
+    #number of indirect paths
+    # 3
+    aprime2_2000 = bgmatrix_2000^2;
+    aprime3_2000 = bgmatrix_2000^3;
+    nind2_2000 = sum(aprime2_2000);
+    nind3_2000 = sum(aprime3_2000);
+
+    rich[r,2] = rich_2000;
     conn[r,2] = sum(bgmatrix_2000)/size(bgmatrix_2000)[1]^2;
+    nest[r,2] = nest_2000;
+    mod[r,2] = mod_2000;
+    nind2[r,2] = nind2_2000;
+    nind3[r,2] = nind3_2000;
+
+    # Contribution of each species
+    #1700
+    splist = collect(1:rich_1700);
+    for i=1:rich_1700
+        spadj = setdiff(splist,i);
+        a_adj = bgmatrix_1700[spadj,spadj];
+        aprime2_adj = a_adj^2;
+        nind2_1700_sp[r,i] = nind2_1700 / sum(aprime2_adj);
+        aprime3_adj = a_adj^3;
+        nind3_1700_sp[r,i] = nind3_1700 / sum(aprime3_adj);
+    end
+    splist = collect(1:rich_2000);
+    for i=1:rich_2000
+        spadj = setdiff(splist,i);
+        a_adj = bgmatrix_1700[spadj,spadj];
+        aprime2_adj = a_adj^2;
+        nind2_2000_sp[r,i] = nind2_2000 / sum(aprime2_adj);
+        aprime3_adj = a_adj^3;
+        nind3_2000_sp[r,i] = nind3_2000 / sum(aprime3_adj);
+    end
+
 end
 
 
@@ -172,6 +264,8 @@ R"ctl_2000 <- TrophInd($(bgmatrix_2000))[,1]"
 ctlcolors_2000 = Int64.(round.(ctl_2000 .* 10));
 ctlcolors_2000 = ctlcolors_2000 .- minimum(ctlcolors_2000) .+ 1;
 
+
+
 namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panel.pdf";
 R"""
 library(igraph)
@@ -180,6 +274,9 @@ library(plot.matrix)
 library(RColorBrewer)
 pdf($namespace,width=14,height=12)
 par(mfrow=c(2,2))
+# layout(matrix(c(1,2,3,4),2,2,byrow=TRUE), widths=c(1,1,1,1), heights=c(0.5,0.5,0.5,0.5))
+# par(list(oma = c(3, 3, 0.5, 0.5), mar = c(3, 3, 3, 1)))
+
 
 pal = rev(brewer.pal(9,'YlOrRd'))
 pijarray = $pijarray
@@ -188,11 +285,11 @@ colnames(pijarray) = $preymasses
 # plot((pijarray),main='',border=NA,col=pal,xlab='Pred mass (kg)',ylab='Prey mass (kg)')
 image.plot(x=$predmasses,y=$preymasses,z=$pijarray,col=pal,legend.args=list(text='     Pr(link)',
 side=3,
-line=.5)
+line=.5), xlab='Pred mass (kg)', ylab = 'Prey mass (kg)',cex.axis=1.5, cex.lab=1.5
 )
 
 pal = rev(brewer.pal(9,'YlGnBu'))
-plot($(Apredict_bg_sort_cons),axis.col=3,main='',col=pal)
+plot($(Apredict_bg_sort_cons),axis.col=3,main='',col=pal,fmt.key="%.2f",xlab='',ylab='',cex.axis=1.5, cex.lab=1.5)
 
 # plot($(bgmatrix_1700),axis.col=3,main='',key=NULL)
 pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max(c($ctlcolors_1700,$ctlcolors_2000)))
@@ -201,6 +298,7 @@ lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl_1700
 plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_1700],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id1700)
+# legend(0,10,lv,col=pal[lv],pch=16)
 
 # plot($(bgmatrix_2000),axis.col=3,main='',key=NULL)
 # pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max($ctlcolors_2000))
@@ -209,5 +307,125 @@ lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl_2000
 plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_2000],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id2000)
+dev.off()
+"""
+
+
+
+#inset figure
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset.pdf";
+R"""
+pdf($namespace,width=5,height=4)
+# par(mfrow=c(2,2))
+layout(matrix(c(1,2,3,4),2,2,byrow=TRUE), widths=c(1,1,1,1), heights=c(0.5,0.5,0.5,0.5))
+par(list(oma = c(3, 2, 0.5, 0.5), mar = c(1, 3, 0, 1)))
+boxplot($rich,names=c('',''),boxwex=0.25)
+boxplot($conn,names=c('',''),boxwex=0.25)
+boxplot($nest,names=c('1700','2000'),boxwex=0.25)
+boxplot($mod,names=c('1700','2000'),boxwex=0.25)
+dev.off()
+"""
+
+
+#inset figure
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset_trim.pdf";
+R"""
+pdf($namespace,width=5,height=2)
+# par(mfrow=c(2,2))
+layout(matrix(c(1,2),1,2,byrow=TRUE), widths=c(1,1), heights=c(0.5,0.5))
+par(list(oma = c(1, 0.25, 0.5, 0.25), mar = c(1, 2, 0, 1)))
+boxplot($rich,names=c('1700','2000'),boxwex=0.25)
+boxplot($conn,names=c('1700','2000'),boxwex=0.25)
+dev.off()
+"""
+
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset_trim_indirect.pdf";
+R"""
+pdf($namespace,width=2,height=3.5)
+# par(mfrow=c(2,2))
+pal = brewer.pal(3,'Set1')
+layout(matrix(c(1,2),2,1,byrow=TRUE), widths=c(1,1), heights=c(0.5,0.5))
+par(list(oma = c(1, 0.25, 0.5, 0.25), mar = c(1, 2, 0, 1)))
+boxplot($nind2,names=c('',''),boxwex=0.25,col=pal[2])
+boxplot($nind3,names=c('1700','2000'),boxwex=0.25,col=pal[3])
+dev.off()
+"""
+
+
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset_trim_indirectnorm.pdf";
+R"""
+pdf($namespace,width=2,height=3.5)
+# par(mfrow=c(2,2))
+pal = brewer.pal(3,'Set1')
+layout(matrix(c(1,2),2,1,byrow=TRUE), widths=c(1,1), heights=c(0.5,0.5))
+par(list(oma = c(1, 0.25, 0.5, 0.25), mar = c(1, 2, 0, 1)))
+boxplot($nind2 / $rich,names=c('',''),boxwex=0.25,col=pal[2])
+boxplot($nind3 / $rich,names=c('1700','2000'),boxwex=0.25,col=pal[3])
+dev.off()
+"""
+
+
+
+#legend
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panel_legend.pdf";
+R"""
+pdf($namespace,width=5,height=6)
+plot(seq(1,20),seq(1,20))
+lv = seq(0,max(c($ctlcolors_1700,$ctlcolors_2000)),length.out=4); lv[1] = 1;
+lvnum = c(1,2,3,4)
+legend(15,12,rev(lvnum),col=rev(pal[lv]),pch=16,cex=1.5)
+dev.off()
+"""
+
+
+
+# indirect paths species by species
+date = "1700";
+occur1700 = findall(!iszero,nw_bs[!,Symbol(date)]);
+
+date = "2000";
+occur2000 = findall(!iszero,nw_bs[!,Symbol(date)]);
+
+occurboth = intersect(occur1700,occur2000)
+namesboth = nw_bs[!,:Species][occurboth];
+
+alist = [findall(x->x==occurboth[i],occur1700) for i=1:17];
+apos = collect(Iterators.flatten(alist));
+
+# scatterplot(mspindirect2_1700[apos],mspindirect2_2000)
+# scatterplot(mspindirect3_1700[apos],mspindirect3_2000)
+
+mspindirect2_1700 = vec(mean(nind2_1700_sp,dims=1));
+mspindirect2_2000 = vec(mean(nind2_2000_sp,dims=1));
+mspindirect3_1700 = vec(mean(nind3_1700_sp,dims=1));
+mspindirect3_2000 = vec(mean(nind3_2000_sp,dims=1));
+
+fullind2_1700 = nind2_1700_sp[:,apos];
+fullind3_1700 = nind3_1700_sp[:,apos];
+fullind2_2000 = nind2_2000_sp;
+fullind3_2000 = nind3_2000_sp;
+
+namesboth[findall(x->x>1.5,mspindirect3_2000)]
+
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset_trim_indirect_species.pdf";
+R"""
+pdf($namespace,width=3.5,height=3.5)
+# par(mfrow=c(2,2))
+layout(matrix(c(1),1,1,byrow=TRUE), widths=c(1), heights=c(0.5))
+par(list(oma = c(3, 2, 0.5, 0.25), mar = c(1, 2, 0, 1)))
+pal = brewer.pal(5,'Set1')
+plot($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=21,bg=pal[2],col='black',xlim=c(1,1.8),ylim=c(1,1.8),cex=1.25,xlab='',ylab='')
+# points($(vec(fullind2_1700)),$(vec(fullind2_2000)),pch='.',col=paste(pal[2],'10',sep=''))
+# points($(vec(fullind3_1700)),$(vec(fullind3_2000)),pch='.',col=paste(pal[3],'10',sep=''))
+lines(seq(0.5,2.5),seq(0.5,2.5),col='gray')
+points($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=21,bg=pal[2],col='black',cex=1.25)
+points($(mspindirect3_1700[apos]),$(mspindirect3_2000),pch=21,bg=pal[3],col='black',cex=1.25)
+points($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=16,col=pal[2],cex=1.25)
+points($(mspindirect3_1700[apos]),$(mspindirect3_2000),pch=16,col=pal[3],cex=1.25)
+text($(mspindirect3_1700[apos]),$(mspindirect3_2000),$namesboth,cex=0.5)
+# lines(seq(0,2,length.out=10),rep(1,10),col=pal[4])
+# lines(rep(1,10),seq(0,2,length.out=10),col=pal[4])
+mtext(side=1,expression(paste("Ratio indirect interactions (1700)")),line=2.5)
+mtext(side=2,expression(paste("Ratio indirect interactions (2000)")),line=2)
 dev.off()
 """
