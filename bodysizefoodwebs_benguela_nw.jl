@@ -119,7 +119,15 @@ for r=1:reps
     date = "1700";
     occur = findall(!iszero,nw_bs[!,Symbol(date)]);
     id1700 = collect(1:length(nw_mass))[occur];
+    #This is a directed web
     bgmatrix_1700 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+        # #What happens if web is undirected?
+        # R"""
+        # gdir = graph_from_adjacency_matrix($bgmatrix_1700);
+        # gundir = as.undirected(gdir);
+        # bgmatrix_1700 = as.matrix(as_adjacency_matrix(gundir));
+        # """
+        # @rget bgmatrix_1700;
     rich_1700 = size(bgmatrix_1700)[1];
     R"""
     unodfvalue = suppressWarnings(unodf($bgmatrix_1700,selfloop=TRUE))
@@ -156,6 +164,13 @@ for r=1:reps
     occur = findall(!iszero,nw_bs[!,Symbol(date)]);
     id2000 = collect(1:length(nw_mass))[occur];
     bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+        # #What happens if web is undirected?
+        # R"""
+        # gdir = graph_from_adjacency_matrix($bgmatrix_2000);
+        # gundir = as.undirected(gdir);
+        # bgmatrix_2000 = as.matrix(as_adjacency_matrix(gundir));
+        # """
+        # @rget bgmatrix_2000;
     rich_2000 = size(bgmatrix_2000)[1];
     R"""
     unodfvalue = suppressWarnings(unodf($bgmatrix_2000,selfloop=TRUE))
@@ -422,7 +437,7 @@ points($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=21,bg=pal[2],col='bla
 points($(mspindirect3_1700[apos]),$(mspindirect3_2000),pch=21,bg=pal[3],col='black',cex=1.25)
 points($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=16,col=pal[2],cex=1.25)
 points($(mspindirect3_1700[apos]),$(mspindirect3_2000),pch=16,col=pal[3],cex=1.25)
-text($(mspindirect3_1700[apos]),$(mspindirect3_2000),$namesboth,cex=0.5)
+# text($(mspindirect3_1700[apos]),$(mspindirect3_2000),$namesboth,cex=0.5)
 # lines(seq(0,2,length.out=10),rep(1,10),col=pal[4])
 # lines(rep(1,10),seq(0,2,length.out=10),col=pal[4])
 mtext(side=1,expression(paste("Ratio indirect interactions (1700)")),line=2.5)

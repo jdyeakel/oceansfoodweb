@@ -1,0 +1,30 @@
+Species with the highest indirect pathway ratio (2000)
+
+directed
+ "Harp seal"
+ "Rock Fish"
+ "Sandlance"
+ "Atlantic Herring"
+ "Pollock "
+ "Haddock"
+ "White-sided Dolphin"
+ "Caplin"
+ "Shrimp"
+ "Lobster"
+ "Snow crab"
+ 
+ 
+ 
+ 
+undirected
+ "Harp seal"
+ "Rock Fish"
+ "Sandlance"
+ "Atlantic Herring"
+ "Pollock "
+ "Haddock"
+ "White-sided Dolphin"
+ "Caplin"
+ "Shrimp"
+ "Lobster"
+ "Snow crab"
