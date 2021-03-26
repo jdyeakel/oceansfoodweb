@@ -130,8 +130,8 @@ id2000 = collect(1:length(nw_mass))[occur];
 bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
 
 
-preymasses = [10^i for i=collect(1:0.1:4)];
-predmasses = [10^i for i=collect(1:0.1:4)];
+preymasses = [10^i for i=collect(1:0.01:4)];
+predmasses = [10^i for i=collect(1:0.01:4)];
 lpy = length(preymasses);
 lpd = length(predmasses);
 pijarray = Array{Float64}(undef,lpd,lpy);
@@ -283,10 +283,12 @@ for r=1:reps
         aprime3_adj = a_adj^3;
         nind3_1700_sp[r,i] = nind3_1700 / sum(aprime3_adj);
     end
+    # Contribution of each species
+    #2000
     splist = collect(1:rich_2000);
     for i=1:rich_2000
         spadj = setdiff(splist,i);
-        a_adj = bgmatrix_1700[spadj,spadj];
+        a_adj = bgmatrix_2000[spadj,spadj];
         aprime2_adj = a_adj^2;
         nind2_2000_sp[r,i] = nind2_2000 / sum(aprime2_adj);
         aprime3_adj = a_adj^3;
@@ -490,8 +492,8 @@ fullind3_1700 = nind3_1700_sp[:,apos];
 fullind2_2000 = nind2_2000_sp;
 fullind3_2000 = nind3_2000_sp;
 
-namesboth[findall(x->x>1.5,mspindirect3_2000)]
-apos[findall(x->x>1.5,mspindirect3_2000)]
+namesboth[findall(x->x>1.3,mspindirect3_2000)]
+apos[findall(x->x>1.3,mspindirect3_2000)]
 
 
 namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/foodweb_4panelinset_trim_indirect_species.pdf";
@@ -501,7 +503,7 @@ pdf($namespace,width=3.5,height=3.5)
 layout(matrix(c(1),1,1,byrow=TRUE), widths=c(1), heights=c(0.5))
 par(list(oma = c(3, 2, 0.5, 0.25), mar = c(1, 2, 0, 1)))
 pal = brewer.pal(5,'Set1')
-plot($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=21,bg=pal[2],col='black',xlim=c(1,1.8),ylim=c(1,1.8),cex=1.25,xlab='',ylab='')
+plot($(mspindirect2_1700[apos]),$(mspindirect2_2000),pch=21,bg=pal[2],col='black',xlim=c(1,1.5),ylim=c(1,1.5),cex=1.25,xlab='',ylab='')
 # points($(vec(fullind2_1700)),$(vec(fullind2_2000)),pch='.',col=paste(pal[2],'10',sep=''))
 # points($(vec(fullind3_1700)),$(vec(fullind3_2000)),pch='.',col=paste(pal[3],'10',sep=''))
 lines(seq(0.5,2.5),seq(0.5,2.5),col='gray')
@@ -514,6 +516,8 @@ points($(mspindirect3_1700[apos]),$(mspindirect3_2000),pch=16,col=pal[3],cex=1.2
 # lines(rep(1,10),seq(0,2,length.out=10),col=pal[4])
 mtext(side=1,expression(paste("Ratio indirect interactions (1700)")),line=2.5)
 mtext(side=2,expression(paste("Ratio indirect interactions (2000)")),line=2)
+text(1.14,1.3,'a')
+text(1.2,1.45,'a')
 dev.off()
 """
 
@@ -535,15 +539,26 @@ pdf($namespace,width=20,height=20)
 par(list(oma = c(3, 3, 0, 0), mar = c(2, 2, 1, 0)))
 
 
-pal = rev(brewer.pal(9,'YlOrRd'))
-pijarray = $pijarray
-rownames(pijarray) = $predmasses
-colnames(pijarray) = $preymasses
-margin = 0.05
+# pal = rev(brewer.pal(9,'YlOrRd'))
+# pijarray = $pijarray
+# rownames(pijarray) = $predmasses
+# colnames(pijarray) = $preymasses
+margin = 0.08
+
 # PLOT 1
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0*(1+0.01), 0.33*(1-0.01), .66*(1+0.01), 1*(1-0.01))))
-image(t(apply(t($Asort_bts), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
+par(list(new=TRUE, plt=c(0.02*(1+0.03), 0.33*(1-0.03), .66*(1+0.04), 1*(1-0.05))))
+
+# plot($Asort_bg,col=c('white','black'),key=NULL, axis.col=NULL, axis.row=NULL,border=NA,main='',xlab='',ylab='')
+image(t(apply(t($Asort_bg), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
+
+
+# PLOT 1
+# c(x1, x2, y1, y2)
+par(list(new=TRUE, plt=c(.33*(1+0.01), 0.66*(1-0.03), .66*(1+0.04), 1*(1-0.05))))
+image(t(apply(t($Asort_pc), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
+
+
 # axis(1,labels=FALSE,tick=FALSE)
 # axis(2,labels=FALSE,tick=FALSE)
 # axis(3,labels=FALSE,tick=FALSE)
@@ -551,33 +566,33 @@ image(t(apply(t($Asort_bts), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='
 # axis.col=NULL, axis.row=NULL,
 # PLOT 2
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(.33*(1+0.01), 0.66*(1-0.01), .66*(1+0.01), 1*(1-0.01))))
 # plot($Asort_pc,col=c('white','black'),key=NULL, axis.col=NULL, axis.row=NULL,border=NA,main='',xlab='',ylab='')
-image(t(apply(t($Asort_pc), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
+par(list(new=TRUE, plt=c(.66*(1+0.0), 1*(1-0.05), .66*(1+0.04), 1*(1-0.05))))
+image(t(apply(t($Asort_bts), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
 
-# PLOT 3
-# c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(.66*(1+0.0), 1*(1-0.01), .66*(1+0.01), 1*(1-0.01))))
-# plot($Asort_bg,col=c('white','black'),key=NULL, axis.col=NULL, axis.row=NULL,border=NA,main='',xlab='',ylab='')
-image(t(apply(t($Asort_bg), 1, rev)),col=c('white','black'),legend=FALSE,xaxt='n',yaxt='n')
 
 # PLOT 4
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0*(1+margin), 0.5*(1-margin), .33*(1+margin), 0.66*(1-0))))
-image.plot(x=$predmasses,y=$preymasses,z=$pijarray,col=pal,legend.args=list(text='     Pr(link)',
-side=3,
-line=.5), xlab='Pred mass (kg)', ylab = 'Prey mass (kg)',cex.axis=1.5, cex.lab=1.5
-)
+# pal = rev(brewer.pal(9,'YlOrRd'))
+pal = colorRampPalette(rev(brewer.pal(9,"PuBuGn")))(100)
+par(list(new=TRUE, plt=c(0.05*(1+margin), 0.5*(1-0.1), .33*(1+margin), 0.66*(1-0))))
+image.plot(x=$predmasses,y=$preymasses,z=$pijarray,col=pal,xlab='', ylab = '',cex.axis=1.5, cex.lab=1.5,smallplot = c(0.46, 0.47, .36, .65),legend.cex=2,axis.args=list(cex.axis=1.5))
+title(xlab='Predator mass (kg)',ylab='Prey mass (kg)',cex.lab=2.5)
+# pij = $pijarray;
+# colnames(pij) = $predmasses;
+# rownames(pij) = $preymasses;
+# plot(t(pij),axis.col=1,main='',col=pal,fmt.key="%.2f",xlab='Pred mass (kg)',ylab='Prey mass (kg)',cex.axis=1.5, cex.lab=1.5)
+
 pal = rev(brewer.pal(9,'YlGnBu'))
 
 # PLOT 5
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0.55*(1+margin), 1*(1-margin), .33*(1+margin), 0.66*(1-0))))
-plot($(Apredict_bg_sort_cons),axis.col=1,main='',col=pal,fmt.key="%.2f",xlab='',ylab='',cex.axis=1.5, cex.lab=1.5)
+par(list(new=TRUE, plt=c(0.5*(1+margin), 1*(1-margin), .33*(1+margin), 0.66*(1-0))))
+plot($(Apredict_bg_sort_cons),axis.col=1,main='',col=pal,fmt.key="%.1f",xlab='',ylab='',cex.axis=1.5, cex.lab=1.5)
 
 # Plot 6
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0*(1+margin), 0.33*(1-margin), 0*(1+margin), 0.33*(1-margin))))
+par(list(new=TRUE, plt=c(0*(1+margin), 0.33*(1-margin), 0.04, 0.33*(1-margin))))
 # plot($(bgmatrix_1700),axis.col=3,main='',key=NULL)
 pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max(c($ctlcolors_1700,$ctlcolors_2000)))
 agraph = graph_from_adjacency_matrix($(bgmatrix_1700))
@@ -586,10 +601,12 @@ lay <- layout.fruchterman.reingold(agraph)
 lay[,2] <- ctl_1700
 plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_1700],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id1700)
 # legend(0,10,lv,col=pal[lv],pch=16)
+mtext('1700',side=1,line=2,cex=3)
+
 
 # Plot 7
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(.33*(1+margin), 0.66*(1-margin), 0*(1+margin), 0.33*(1-margin))))
+par(list(new=TRUE, plt=c(.33*(1+margin), 0.66*(1-margin), 0.0, 0.33*(1+0.05))))
 # plot($(bgmatrix_2000),axis.col=3,main='',key=NULL)
 # pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max($ctlcolors_2000))
 agraph = graph_from_adjacency_matrix($(bgmatrix_2000))
@@ -597,17 +614,100 @@ lay <- layout.fruchterman.reingold(agraph)
 # lay <- layout_on_sphere(agraph)
 lay[,2] <- ctl_2000
 plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_2000],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id2000)
+mtext('2000',side=1,line=-1.6,cex=3)
 
 pal = brewer.pal(3,'Set1')
 # PLOT 8
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0.66*(1+margin), 1*(1-margin), 0.16*(1+margin), 0.33*(1-margin))))
-boxplot($nind2,names=c('',''),boxwex=0.25,col=pal[2])
+par(list(new=TRUE, plt=c(0.66*(1+margin), 1*(1-margin), 0.18, 0.33*(1-0.05))))
+boxplot($nind2,names=c('',''),boxwex=0.25,col=pal[2],cex.axis=1.5)
 
 # PLOT 9
 # c(x1, x2, y1, y2)
-par(list(new=TRUE, plt=c(0.66*(1+margin), 1*(1-margin), 0*(1+margin), 0.16*(1-margin))))
-boxplot($nind3,names=c('1700','2000'),boxwex=0.25,col=pal[3])
+par(list(new=TRUE, plt=c(0.66*(1+margin), 1*(1-margin), 0.05, 0.18)))
+boxplot($nind3,names=c('1700','2000'),boxwex=0.25,col=pal[3],xaxt='n',cex.axis=1.5)
+axis(1,at=c(1,2),labels=c('1700','2000'),cex.axis=3,line=2,tick=FALSE)
 
 dev.off()
 """
+
+
+# ,legend.args=list(text='     Pr(link)',
+# side=3,
+# line=0.5)
+
+
+
+
+
+
+
+
+#For Greg
+# five food webs of 1700
+# five food webs of 2000
+namespace = "$(homedir())/Dropbox/Funding/20_NSF_OCE/oceanfoodwebs_2020/foodweb_model/figures/gregwebs.pdf";
+R"""
+pdf($namespace,height=15,width=50)
+layout(matrix(seq(1,10),2,5,byrow=TRUE), widths=c(1,1), heights=c(0.5,0.5))
+par(list(oma = c(1, 0.25, 0.5, 0.25), mar = c(1, 2, 0, 1)))
+"""
+for r=1:5
+    date = "1700";
+    occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+    id1700 = collect(1:length(nw_mass))[occur];
+    #This is a directed web
+    bgmatrix_1700 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+
+
+    #Calculate trophic level
+    R"library(NetIndices)"
+    R"ctl_1700 <- TrophInd($(bgmatrix_1700))[,1]"
+    @rget ctl_1700;
+    ctlcolors_1700 = Int64.(round.(ctl_1700 .* 10));
+    ctlcolors_1700 = ctlcolors_1700 .- minimum(ctlcolors_1700) .+ 1;
+
+
+    R"""
+        # par(list(new=TRUE, plt=c(0*(1+margin), 0.33*(1-margin), 0.04, 0.33*(1-margin))))
+        # plot($(bgmatrix_1700),axis.col=3,main='',key=NULL)
+        # pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max(c($ctlcolors_1700,$ctlcolors_2000)))
+        pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(30)
+        agraph = graph_from_adjacency_matrix($(bgmatrix_1700))
+        lay <- layout.fruchterman.reingold(agraph)
+        # lay <- layout_on_sphere(agraph)
+        lay[,2] <- ctl_1700
+        plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_1700],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id1700)
+        # legend(0,10,lv,col=pal[lv],pch=16)
+        mtext('1700',side=1,line=2,cex=3)
+    """
+end
+
+for r=1:5
+    date = "2000";
+    occur = findall(!iszero,nw_bs[!,Symbol(date)]);
+    id2000 = collect(1:length(nw_mass))[occur];
+    #This is a directed web
+    bgmatrix_2000 = bsfoodweb(xmax_bg,nw_mass,trophic,occur);
+
+    R"ctl_2000 <- TrophInd($(bgmatrix_2000))[,1]"
+    @rget ctl_2000;
+    ctlcolors_2000 = Int64.(round.(ctl_2000 .* 10));
+    ctlcolors_2000 = ctlcolors_2000 .- minimum(ctlcolors_2000) .+ 1;
+
+    R"""
+        # par(list(new=TRUE, plt=c(0*(1+margin), 0.33*(1-margin), 0.04, 0.33*(1-margin))))
+        # plot($(bgmatrix_1700),axis.col=3,main='',key=NULL)
+        # pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(max(c($ctlcolors_1700,$ctlcolors_2000)))
+        pal = colorRampPalette(rev(brewer.pal(11,"Spectral")))(30)
+        agraph = graph_from_adjacency_matrix($(bgmatrix_2000))
+        lay <- layout.fruchterman.reingold(agraph)
+        # lay <- layout_on_sphere(agraph)
+        lay[,2] <- ctl_2000
+        plot.igraph(agraph,layout = lay,vertex.color=pal[$ctlcolors_2000],vertex.size=18,edge.arrow.size=0.5,vertex.label.color='white',vertex.label=$id2000)
+        # legend(0,10,lv,col=pal[lv],pch=16)
+        mtext('2000',side=1,line=2,cex=3)
+    """
+end
+R"dev.off()"
+
